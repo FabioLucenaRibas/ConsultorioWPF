@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz" 
+        xmlns:local="clr-namespace:Consultorio" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Consultorio.MainWindow" 
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}" 
+        TextElement.FontWeight="Regular" 
+        TextElement.FontSize="13" 
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto" 
+        Background="{DynamicResource MaterialDesignPaper}" 
+        FontFamily="{DynamicResource MaterialDesignFont}" 
+        mc:Ignorable="d" Title="Consultorio" Height="644"
+        Width="1247" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <dragablz:TabablzControl BorderBrush="#FF37474F">
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController />
+            </dragablz:TabablzControl.InterTabController>
+            <TabItem Header="ATENDIMENTO">
+                <Grid>
+                    <DockPanel Margin="16,16,16,16">
+                        <materialDesign:Card Padding="22" DockPanel.Dock="Top">
+                            <DockPanel>
+                                <DockPanel Margin="0,0,25,0">
+                                    <Image Height="85" Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Source="logo-fisioterapia (1).png" />
+                                    <StackPanel>
+                                        <TextBlock Text="Jéssyka ● Lucena" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0,25,10,-10" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" FontWeight="Bold"/>
+                                        <TextBlock Text="FISIOTERAPEUTA" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0,5,10,0" FontSize="10" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"/>
+                                        <TextBlock Text="CRF 248649-F" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0,-1,10,0" FontSize="8" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="Black"/>
+                                    </StackPanel>
+                                </DockPanel>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0,0,10,-10" FontSize="10" VerticalAlignment="Bottom" HorizontalAlignment="Left">Data da consulta</TextBlock>
+                                    <DockPanel>
+                                        <DatePicker x:Name="dataInicio" Language="pt-BR" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                        <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" FontSize="10" VerticalAlignment="Center" Margin="10,10,10,0" HorizontalAlignment="Left">a</TextBlock>
+                                        <DatePicker x:Name="dataFim" Language="pt-BR" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                        <TextBox Name="tb_Nome" materialDesign:HintAssist.Hint="Nome" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0,0,0" HorizontalAlignment="Left" Width="300" />
+                                        <TextBox Name="tb_CPF" materialDesign:HintAssist.Hint="CPF" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0" HorizontalAlignment="Left" Width="150" PreviewTextInput="Tb_CPF_PreviewTextInput" MaxLength="14" LostFocus="Tb_CPF_LostFocus" />
+                                        <Button Name="bt_pesquisar" Content="PESQUISAR" Click="Bt_pesquisar_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                                        <Button Name="bt_limpar" Content="LIMPAR" Click="Bt_limpar_Click" Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" Margin="0,0,10,0" Foreground="#FF5F5F5F"/>
+                                    </DockPanel>
+                                </StackPanel>
+                            </DockPanel>
+                        </materialDesign:Card>
+                        <Grid  Margin="16,16,16,0" DockPanel.Dock="Bottom">
+                            <Grid  Margin="0,0,255,0">
+                                <ListView x:Name="gridAtendimento" ItemsSource="{Binding}" Margin="0,0,0,46" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Data/Hora da consulta" DisplayMemberBinding="{Binding DataConsulta}"/>
+                                            <GridViewColumn Header="Nome Completo" DisplayMemberBinding="{Binding NomePaciente}"/>
+                                            <GridViewColumn Header="CPF" DisplayMemberBinding="{Binding Cpf}"/>
+                                            <GridViewColumn Header="Telefone" DisplayMemberBinding="{Binding Telefone}"/>
+                                            <GridViewColumn Header="Data de nascimento" DisplayMemberBinding="{Binding DataNascimento}"/>
+                                            <GridViewColumn Header="Tratamento" DisplayMemberBinding="{Binding Tratamento}"/>
+                                            <GridViewColumn Header="Situação" DisplayMemberBinding="{Binding Situacao}"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <DockPanel Name="botoesPaginacaoAtendimento" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                                    <DockPanel>
+                                        <Button Name="bt_Prev" Click="BtnPrev_Click" Margin="0,0,5,0" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F">
+                                            <![CDATA[<]]>
+                                        </Button>
+                                        <Button Name="bt_First" Click="BtnFirst_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F">
+                                            <![CDATA[<<]]>
+                                        </Button>
+                                    </DockPanel>
+                                    <Label Name="lb_PaginaAtual" Margin="15,0,5,0" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Label Content="-" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Label Name="lb_TotalPaginas" Margin="5,0,15,0" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <DockPanel>
+                                        <Button Name="bt_Last" Content=">>" Click="BtnLast_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                                        <Button Name="bt_Next" Content=">" Click="BtnNext_Click" Margin="0,0,5,0" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                                    </DockPanel>
+                                </DockPanel>
+                            </Grid>
+                            <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Auto">
+                                <TreeView Name="treeViewConsultaSimplificada" DockPanel.Dock="Right" MinWidth="220" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                            </ScrollViewer>
+                        </Grid>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="PACIENTE">
+                <Grid>
+                    <DockPanel Margin="16,16,16,0" VerticalAlignment="Top">
+                        <TextBox Name="tb_Paciente_Nome" materialDesign:HintAssist.Hint="Nome" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0,0,0" HorizontalAlignment="Left" Width="300" />
+                        <TextBox Name="tb_Paciente_CPF" materialDesign:HintAssist.Hint="CPF" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0" HorizontalAlignment="Left" Width="150" PreviewTextInput="Tb_CPF_PreviewTextInput" MaxLength="14" LostFocus="Tb_CPF_LostFocus" />
+                        <Button Name="bt_Cadastra" Content="CADASTRAR" Click="Bt_pesquisar_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+        </dragablz:TabablzControl>
+        <Button Name="bt_Sobre" Content="SOBRE" Click="Bt_Sobre_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Top"  DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F" Margin="0,4,4,0" BorderThickness="1"/>
+    </Grid>
+</Window>

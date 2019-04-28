@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Biblioteca.ClassesBasicas" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Biblioteca.ClassesBasicas" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ConsultaFiltro">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Cpf" type="xs:long" />
+      <xs:element minOccurs="0" name="DataFim" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DataInicio" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="NomePaciente" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultaFiltro" nillable="true" type="tns:ConsultaFiltro" />
+  <xs:complexType name="ArrayOfConsulta">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Consulta" nillable="true" type="tns:Consulta" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsulta" nillable="true" type="tns:ArrayOfConsulta" />
+  <xs:complexType name="Consulta">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Codigo" type="xs:int" />
+      <xs:element minOccurs="0" name="DataConsulta" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Paciente" nillable="true" type="tns:Paciente" />
+      <xs:element minOccurs="0" name="Pagemento" type="xs:int" />
+      <xs:element minOccurs="0" name="Situacao" nillable="true" type="tns:Situacao" />
+      <xs:element minOccurs="0" name="Tratamento" nillable="true" type="tns:Tratamento" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Consulta" nillable="true" type="tns:Consulta" />
+  <xs:complexType name="Paciente">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Bairro" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Cep" type="xs:long" />
+      <xs:element minOccurs="0" name="Cidade" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Complemento" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Cpf" type="xs:long" />
+      <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Estado" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Logradouro" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Nome" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Numero" type="xs:long" />
+      <xs:element minOccurs="0" name="Sexo" type="tns:Sexo" />
+      <xs:element minOccurs="0" name="Telefone" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Paciente" nillable="true" type="tns:Paciente" />
+  <xs:simpleType name="Sexo">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="MASCULINO" />
+      <xs:enumeration value="FEMININO" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Sexo" nillable="true" type="tns:Sexo" />
+  <xs:complexType name="Situacao">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Codigo" type="xs:int" />
+      <xs:element minOccurs="0" name="Descricao" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Situacao" nillable="true" type="tns:Situacao" />
+  <xs:complexType name="Tratamento">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Codigo" type="xs:int" />
+      <xs:element minOccurs="0" name="Descricao" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Duracao" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Nome" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Preco" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Tratamento" nillable="true" type="tns:Tratamento" />
+  <xs:complexType name="ArrayOfPaciente">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Paciente" nillable="true" type="tns:Paciente" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPaciente" nillable="true" type="tns:ArrayOfPaciente" />
+  <xs:complexType name="CEP">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Bairro" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Cidade" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Logradouro" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Resultado" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ResultadoMensagem" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TipoLogradouro" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UF" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CEP" nillable="true" type="tns:CEP" />
+</xs:schema>
