@@ -74,6 +74,7 @@
     <Compile Include="ClassesBasicas\Sexo.cs" />
     <Compile Include="Negocio\SiteUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\PacientesViewModel.cs" />
     <Compile Include="ViewModel\ConsultaViewModel.cs" />
   </ItemGroup>
   <ItemGroup />

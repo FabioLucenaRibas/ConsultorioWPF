@@ -30,7 +30,9 @@ namespace Biblioteca.Dados
                 sqlQuery += " ,COALESCE (SEXO, '') AS SEXO";
                 sqlQuery += " FROM PACIENTE";
                 sqlQuery += " WHERE NOME LIKE '%"+ pFiltro .Nome + "%'";
-                sqlQuery += " AND CPF LIKE '%" + pFiltro.Cpf + "%'";
+                _ = 0L.Equals(pFiltro.Cpf) ? sqlQuery += " AND CPF LIKE '%%'" : sqlQuery += " AND CPF LIKE '%" + pFiltro.Cpf + "%'";
+
+
                 //sqlQuery += "";
 
                 SqlCommand cmd = new SqlCommand(sqlQuery, sqlConn);
@@ -97,7 +99,7 @@ namespace Biblioteca.Dados
                 sqlQuery += "  VALUES";
                 sqlQuery += " (" + pPaciente.Cpf;
                 sqlQuery += " ,'" + pPaciente.Nome + "'";
-                sqlQuery += " ,'" + SiteUtil.formatarData(pPaciente.Date) + "'";
+                sqlQuery += " ,'" + SiteUtil.FormatarData(pPaciente.Date) + "'";
 
                 if (null != pPaciente.Estado && !string.Empty.Equals(pPaciente.Estado))
                 {

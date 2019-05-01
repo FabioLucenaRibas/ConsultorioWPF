@@ -1,4 +1,5 @@
-﻿using Biblioteca.Negocio;
+﻿using Biblioteca.ClassesBasicas;
+using Biblioteca.Negocio;
 using Biblioteca.ViewModel;
 using Consultorio.ServiceReference1;
 using System;
@@ -19,21 +20,36 @@ namespace Consultorio
     {
         public ConsultaFiltro filtro;
 
-        CollectionViewSource view = new CollectionViewSource();
-        ObservableCollection<ConsultaViewModel> GridAtendimentoSource = new ObservableCollection<ConsultaViewModel>();
-        int currentPageIndex = 0;
-        int itemPerPage = 20;
-        int totalPage = 0;
-        
+        //# INICIO - CONSULTA
+        private readonly CollectionViewSource AtendimentoViewSource = new CollectionViewSource();
+        private ObservableCollection<ConsultaViewModel> GridAtendimentoCollection = new ObservableCollection<ConsultaViewModel>();
+        private int AtendimentoCurrentPageIndex = 0;
+        private readonly int AtendimentoItemPerPage = 20;
+        private int AtendimentoTotalPage = 0;
+        //# FIM - CONSULTA
+
+        //# INICIO - PACIENTES
+        private readonly CollectionViewSource PacientesViewSource = new CollectionViewSource();
+        private ObservableCollection<PacientesViewModel> GridPacientesCollection = new ObservableCollection<PacientesViewModel>();
+        private int PacientesCurrentPageIndex = 0;
+        private readonly int PacientesItemPerPage = 20;
+        private int PacientesTotalPage = 0;
+        //# FIM - PACIENTES
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
             dataInicio.DisplayDateEnd = DateTime.Now;
             dataFim.DisplayDateEnd = DateTime.Now;
-            //ConsultarPacientes();
+            ConsultarPacientes();
             Limpar();
         }
 
+        //# INICIO - CONSULTA
         private void Bt_pesquisar_Click(object sender, EventArgs e)
         {
             try
@@ -44,7 +60,7 @@ namespace Consultorio
                 gridAtendimento.ItemsSource = null;
                 if (resultado.Any())
                 {
-                    CreateDataGridConsulta(resultado);
+                    DataGridConsulta(resultado);
                     CarregarTreeView(resultado);
                 }
                 else
@@ -59,99 +75,88 @@ namespace Consultorio
             }
         }
 
-        private void CreateDataGridConsulta(List<Consulta> resultado)
+        private void DataGridConsulta(List<Consulta> resultado)
         {
-            GridAtendimentoSource = new ObservableCollection<ConsultaViewModel>();
+            GridAtendimentoCollection = new ObservableCollection<ConsultaViewModel>();
             foreach (Consulta item in resultado)
             {
                 ConsultaViewModel itemViewModel = new ConsultaViewModel
                 {
-                    DataConsulta = SiteUtil.formatarDataHora(item.DataConsulta),
+                    DataConsulta = SiteUtil.FormatarDataHora(item.DataConsulta),
                     NomePaciente = item.Paciente.Nome,
-                    Cpf = SiteUtil.formatarCPF(item.Paciente.Cpf),
-                    Telefone = SiteUtil.formatarTelefone(item.Paciente.Telefone),
-                    DataNascimento = SiteUtil.formatarData(item.Paciente.Date),
+                    Cpf = SiteUtil.FormatarCPF(item.Paciente.Cpf),
+                    Telefone = SiteUtil.FormatarTelefone(item.Paciente.Telefone),
+                    DataNascimento = SiteUtil.FormatarData(item.Paciente.Date),
                     Tratamento = item.Tratamento.Nome,
                     Situacao = item.Situacao.Descricao
                 };
 
-                GridAtendimentoSource.Add(itemViewModel);
+                GridAtendimentoCollection.Add(itemViewModel);
             }
             int itemcount = resultado.Count;
-            if (itemcount >= itemPerPage)
+            AtendimentoTotalPage = itemcount / AtendimentoItemPerPage;
+            if (itemcount % AtendimentoItemPerPage != 0)
             {
-                botoesPaginacaoAtendimento.Visibility = Visibility;
+                AtendimentoTotalPage += 1;
             }
 
-            totalPage = itemcount / itemPerPage;
-            if (itemcount % itemPerPage != 0)
-            {
-                totalPage += 1;
-            }
-
-            view.Source = GridAtendimentoSource;
-            view.Filter += new FilterEventHandler(View_Filter);
-           // this.gridAtendimento.DataContext = view;
-            gridAtendimento.ItemsSource = view.View;
+            AtendimentoViewSource.Source = GridAtendimentoCollection;
+            AtendimentoViewSource.Filter += new FilterEventHandler(View_Filter);
+            // this.gridAtendimento.DataContext = ViewSource;
+            gridAtendimento.ItemsSource = AtendimentoViewSource.View;
             ShowCurrentPageIndex();
-            this.lb_TotalPaginas.Content = totalPage.ToString();
+            this.lb_TotalPaginas.Content = AtendimentoTotalPage.ToString();
             gridAtendimento.Visibility = Visibility;
+            botoesPaginacaoAtendimento.Visibility = Visibility;
         }
 
         private void ShowCurrentPageIndex()
         {
-            this.lb_PaginaAtual.Content = (currentPageIndex + 1).ToString();
+            this.lb_PaginaAtual.Content = (AtendimentoCurrentPageIndex + 1).ToString();
         }
-   
+
         void View_Filter(object sender, FilterEventArgs e)
         {
-            int index = GridAtendimentoSource.IndexOf((ConsultaViewModel)e.Item);
-            if (index >= itemPerPage * currentPageIndex && index < itemPerPage * (currentPageIndex + 1))
-            {
-                e.Accepted = true;
-            }
-            else
-            {
-                e.Accepted = false;
-            }
+            int index = GridAtendimentoCollection.IndexOf((ConsultaViewModel)e.Item);
+            e.Accepted = (index >= AtendimentoItemPerPage * AtendimentoCurrentPageIndex && index < AtendimentoItemPerPage * (AtendimentoCurrentPageIndex + 1));
         }
 
         private void BtnFirst_Click(object sender, RoutedEventArgs e)
         {
-            if (currentPageIndex != 0)
+            if (AtendimentoCurrentPageIndex != 0)
             {
-                currentPageIndex = 0;
-                view.View.Refresh();
+                AtendimentoCurrentPageIndex = 0;
+                AtendimentoViewSource.View.Refresh();
             }
             ShowCurrentPageIndex();
         }
 
         private void BtnPrev_Click(object sender, RoutedEventArgs e)
         {
-            if (currentPageIndex > 0)
+            if (AtendimentoCurrentPageIndex > 0)
             {
-                currentPageIndex--;
-                view.View.Refresh();
+                AtendimentoCurrentPageIndex--;
+                AtendimentoViewSource.View.Refresh();
             }
             ShowCurrentPageIndex();
         }
 
         private void BtnNext_Click(object sender, RoutedEventArgs e)
         {
-            if (currentPageIndex < totalPage - 1)
+            if (AtendimentoCurrentPageIndex < AtendimentoTotalPage - 1)
             {
-                currentPageIndex++;
-                view.View.Refresh();
+                AtendimentoCurrentPageIndex++;
+                AtendimentoViewSource.View.Refresh();
             }
             ShowCurrentPageIndex();
         }
 
         private void BtnLast_Click(object sender, RoutedEventArgs e)
         {
-            if (currentPageIndex != totalPage - 1)
+            if (AtendimentoCurrentPageIndex != AtendimentoTotalPage - 1)
             {
-                currentPageIndex = totalPage - 1;
-                view.View.Refresh();
+                AtendimentoCurrentPageIndex = AtendimentoTotalPage - 1;
+                AtendimentoViewSource.View.Refresh();
             }
             ShowCurrentPageIndex();
         }
@@ -169,7 +174,7 @@ namespace Consultorio
                 throw new Exception("Você deve informar ao menos 3 caracteres para pesquisar por nome do paciente.");
             }
 
-            if (!string.Empty.Equals(tb_CPF.Text) && !SiteUtil.isValidCPF(tb_CPF.Text))
+            if (!string.Empty.Equals(tb_CPF.Text) && !SiteUtil.IsValidCPF(tb_CPF.Text))
             {
                 throw new Exception("CPF invalido.");
             }
@@ -184,7 +189,7 @@ namespace Consultorio
                 NomePaciente = tb_Nome.Text
             };
 
-            String retorno = SiteUtil.removerCaracteresEspecial(tb_CPF.Text);
+            String retorno = SiteUtil.RemoverCaracteresEspecial(tb_CPF.Text);
             if (!string.Empty.Equals(retorno))
             {
                 filtro.Cpf = Convert.ToInt64(retorno);
@@ -217,125 +222,154 @@ namespace Consultorio
             String data = string.Empty;
             TreeView rootView = treeViewConsultaSimplificada;
             TreeViewItem rootNode = null;
-            TreeViewItem rootItem = null;
             foreach (Consulta item in resultado)
             {
-                if (data.Equals(SiteUtil.formatarData(item.DataConsulta)))
+                if (data.Equals(SiteUtil.FormatarData(item.DataConsulta)))
                 {
-                    PreencherItemNodeTreeView(rootNode, rootItem, item);
+                    PreencherItemNodeTreeView(rootNode, item);
                 }
                 else
                 {
-                    data = SiteUtil.formatarData(item.DataConsulta);
+                    data = SiteUtil.FormatarData(item.DataConsulta);
                     rootNode = new TreeViewItem
                     {
                         Header = data
                     };
                     rootView.Items.Add(rootNode);
 
-                    PreencherItemNodeTreeView(rootNode, rootItem, item);
+                    PreencherItemNodeTreeView(rootNode, item);
                 }
             }
         }
 
-        private void PreencherItemNodeTreeView(TreeViewItem rootNode, TreeViewItem rootItem, Consulta item)
+        private void PreencherItemNodeTreeView(TreeViewItem rootNode, Consulta item)
         {
-            rootItem = new TreeViewItem
+            TreeViewItem rootItem = new TreeViewItem
             {
-                Header = SiteUtil.formatarHora(item.DataConsulta) + " - " + item.Paciente.Nome
+                Header = SiteUtil.FormatarHora(item.DataConsulta) + " - " + item.Paciente.Nome
             };
             rootNode.Items.Add(rootItem);
         }
 
-        //private void Bt_Cadastrar_Paciente_Click(object sender, EventArgs e)
-        //{
-        //    CadastroPaciente formCadastroPaciente = new CadastroPaciente
-        //    {
-        //        Owner = this
-        //    };
-        //    formCadastroPaciente.Show();
-        //}
+        //# FIM - CONSULTA
 
-        //private void Txt_CPF_Leave(object sender, EventArgs e)
-        //{
-        //    FormatarCPF_Leave(tb_CPF);
-        //}
+        //# INICIO - PACIENTES
+
+        public void ConsultarPacientes()
+        {
+            DataGridPacientes(new Service1Client().ConsultarPaciente(new Paciente()).ToList());
+        }
+
+        private void ConsultarPacientePorParametro()
+        {
+            String retorno = SiteUtil.RemoverCaracteresEspecial(tb_Paciente_CPF.Text);
+            Paciente pFiltro = new Paciente
+            {
+                Nome = tb_Paciente_Nome.Text,
+                Cpf = !string.Empty.Equals(retorno) ? Convert.ToInt64(retorno) : 0L
+            };
+            DataGridPacientes(new Service1Client().ConsultarPaciente(pFiltro).ToList());
+        }
+
+        private void DataGridPacientes(List<Paciente> resultado)
+        {
+            GridPacientesCollection = new ObservableCollection<PacientesViewModel>();
+            foreach (Paciente item in resultado)
+            {
+                PacientesViewModel itemViewModel = new PacientesViewModel
+                {
+                    NomeCompleto = item.Nome,
+                    Cpf = SiteUtil.FormatarCPF(item.Cpf),
+                    Telefone = SiteUtil.FormatarTelefone(item.Telefone),
+                    Sexo = SiteUtil.ObterDescricaoEnum(item.Sexo),
+                    DataNascimento = SiteUtil.FormatarData(item.Date),
+                    Cep = SiteUtil.FormatarCEP(item.Cep),
+                    Logradouro = item.Logradouro,
+                    Numero = (!0L.Equals(item.Numero) ? Convert.ToString(item.Numero) : string.Empty),
+                    Complemento = item.Complemento,
+                    Estado = item.Estado,
+                    Cidade = item.Cidade,
+                    Bairro = item.Bairro
+                };
+
+                GridPacientesCollection.Add(itemViewModel);
+            }
+            int itemcount = resultado.Count;
+            PacientesTotalPage = itemcount / PacientesItemPerPage;
+            if (itemcount % PacientesItemPerPage != 0)
+            {
+                PacientesTotalPage += 1;
+            }
+
+            PacientesViewSource.Source = GridPacientesCollection;
+            PacientesViewSource.Filter += new FilterEventHandler(View_Filter_Pacientes);
+            gridPacientes.ItemsSource = PacientesViewSource.View;
+            ShowCurrentPageIndexPacientes();
+            this.lb_TotalPaginasPacientes.Content = PacientesTotalPage.ToString();
+            gridPacientes.Visibility = Visibility;
+            botoesPaginacaoPacientes.Visibility = Visibility;
+        }
+
+        private void ShowCurrentPageIndexPacientes()
+        {
+            this.lb_PaginaAtualPacientes.Content = (PacientesCurrentPageIndex + 1).ToString();
+        }
+
+        void View_Filter_Pacientes(object sender, FilterEventArgs e)
+        {
+            int index = GridPacientesCollection.IndexOf((PacientesViewModel)e.Item);
+            e.Accepted = (index >= PacientesItemPerPage * PacientesCurrentPageIndex && index < PacientesItemPerPage * (PacientesCurrentPageIndex + 1));
+        }
+
+        private void BtnFirstPacientes_Click(object sender, RoutedEventArgs e)
+        {
+            if (PacientesCurrentPageIndex != 0)
+            {
+                PacientesCurrentPageIndex = 0;
+                PacientesViewSource.View.Refresh();
+            }
+            ShowCurrentPageIndexPacientes();
+        }
+
+        private void BtnPrevPacientes_Click(object sender, RoutedEventArgs e)
+        {
+            if (PacientesCurrentPageIndex > 0)
+            {
+                PacientesCurrentPageIndex--;
+                PacientesViewSource.View.Refresh();
+            }
+            ShowCurrentPageIndexPacientes();
+        }
+
+        private void BtnNextPacientes_Click(object sender, RoutedEventArgs e)
+        {
+            if (PacientesCurrentPageIndex < PacientesTotalPage - 1)
+            {
+                PacientesCurrentPageIndex++;
+                PacientesViewSource.View.Refresh();
+            }
+            ShowCurrentPageIndexPacientes();
+        }
+
+        private void BtnLastPacientes_Click(object sender, RoutedEventArgs e)
+        {
+            if (PacientesCurrentPageIndex != PacientesTotalPage - 1)
+            {
+                PacientesCurrentPageIndex = PacientesTotalPage - 1;
+                PacientesViewSource.View.Refresh();
+            }
+            ShowCurrentPageIndexPacientes();
+        }
 
 
-        // PACIENTE
-        //private void Txt_Nome_Paciente_Search_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (e.KeyCode == Keys.Enter)
-        //    {
-        //        ConsultarPacientePorParametro();
-        //    }
-        //}
-
-        //private void TxtCPF_Paciente_Search_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (e.KeyCode == Keys.Enter)
-        //    {
-        //        ConsultarPacientePorParametro();
-        //    }
-        //}
-
-        //private void TxtCPF_Paciente_KeyPress(object sender, KeyPressEventArgs e)
-        //{
-        //    FormatarCPF_KeyPress(txtCPF_Paciente_Search, e);
-        //}
-
-        //private void TxtCPF_Paciente_Leave(object sender, EventArgs e)
-        //{
-        //    FormatarCPF_Leave(txtCPF_Paciente_Search);
-        //}
-
-        //private void ConsultarPacientePorParametro()
-        //{
-        //    Paciente pFiltro = new Paciente
-        //    {
-        //        Nome = txt_Nome_Paciente_Search.Text
-        //    };
-        //    String retorno = SiteUtil.removerCaracteresEspecial(txtCPF_Paciente_Search.Text);
-        //    if (!retorno.Equals(""))
-        //    {
-        //        pFiltro.Cpf = Convert.ToInt64(retorno);
-        //    }
-        //    MontarGrid(new Service1Client().ConsultarPaciente(pFiltro).ToList());
-        //}
-
-        //public void ConsultarPacientes()
-        //{
-        //    MontarGrid(new Service1Client().ConsultarPaciente(new Paciente()).ToList());
-        //}
-
-        //private void MontarGrid(List<Paciente> resultado)
-        //{
-        //    materialListView1.Items.Clear();
-        //    foreach (Paciente item2 in resultado)
-        //    {
-        //        ListViewItem itListView = materialListView1.Items.Add("");
-        //        itListView.SubItems.Add(item2.Nome);
-        //        itListView.SubItems.Add(SiteUtil.formatarCPF(item2.Cpf));
-        //        itListView.SubItems.Add(SiteUtil.formatarTelefone(item2.Telefone));
-        //        itListView.SubItems.Add(SiteUtil.obterDescricaoEnum(item2.Sexo));
-        //        itListView.SubItems.Add(SiteUtil.formatarData(item2.Date));
-        //        itListView.SubItems.Add(SiteUtil.formatarCEP(item2.Cep));
-        //        itListView.SubItems.Add(item2.Logradouro);
-        //        if (!0L.Equals(item2.Numero))
-        //        {
-        //            itListView.SubItems.Add(Convert.ToString(item2.Numero));
-        //        }
-        //        else
-        //        {
-        //            itListView.SubItems.Add("");
-        //        }
-        //        itListView.SubItems.Add(item2.Complemento);
-        //        itListView.SubItems.Add(item2.Estado);
-        //        itListView.SubItems.Add(item2.Cidade);
-        //        itListView.SubItems.Add(item2.Bairro);
-        //        itListView.SubItems.Add("");
-        //    }
-        //}
+        private void Bt_Cadastrar_Paciente_Click(object sender, EventArgs e)
+        {
+            CadastrarPaciente formCadastroPaciente = new CadastrarPaciente
+            {
+                Owner = this
+            };
+            formCadastroPaciente.Show();
+        }
 
         //private void materialListView1_DoubleClick(object sender, EventArgs e)
         //{
@@ -356,18 +390,38 @@ namespace Consultorio
         //    }
         //}
 
-        //// COMUM
-        //private void Timer1_Tick(object sender, EventArgs e)
-        //{
-        //    date_time = DateTime.Now;
-        //    lb_date_time.Text = "Data : " + date_time.ToLongDateString() + "  Hora: " + date_time.ToLongTimeString();
-        //}
+        private void TxtPaciente_Nome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ConsultarPacientePorParametro();
+            }
+        }
 
+        private void TxtPaciente_CPF_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ConsultarPacientePorParametro();
+            }
+        }
+
+        //// COMUM
         public void Bt_Sobre_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Consutorio - Jéssyka ● Lucena\nVersão: 1.1.0\n\nDesenvolvedor: Fábio Lucena Ribas\nLinkedIn: fabiolucenaribas", "Sobre", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        private void Tb_CPF_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            FormatarCPF_KeyPress((TextBox)sender, e);
+        }
+
+
+        private void Tb_CPF_LostFocus(object sender, RoutedEventArgs e)
+        {
+            FormatarCPF_Leave((TextBox)sender);
+        }
 
         private void FormatarCPF_KeyPress(TextBox campoCPF, TextCompositionEventArgs e)
         {
@@ -384,30 +438,19 @@ namespace Consultorio
                         campoCPF.Text = string.Empty;
                         break;
                     case 3:
-                        campoCPF.Text = campoCPF.Text + ".";
+                        campoCPF.Text += ".";
                         campoCPF.SelectionStart = 5;
                         break;
                     case 7:
-                        campoCPF.Text = campoCPF.Text + ".";
+                        campoCPF.Text += ".";
                         campoCPF.SelectionStart = 9;
                         break;
                     case 11:
-                        campoCPF.Text = campoCPF.Text + "-";
+                        campoCPF.Text += "-";
                         campoCPF.SelectionStart = 13;
                         break;
                 }
             }
-        }
-
-        private void Tb_CPF_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            FormatarCPF_KeyPress((TextBox)sender, e);
-        }
-
-
-        private void Tb_CPF_LostFocus(object sender, RoutedEventArgs e)
-        {
-            FormatarCPF_Leave((TextBox)sender);
         }
 
         private void FormatarCPF_Leave(TextBox campoCPF)
@@ -418,13 +461,8 @@ namespace Consultorio
             }
             else
             {
-                campoCPF.Text = SiteUtil.formatarCPF(Convert .ToString(campoCPF.Text));
-           }
-        }
-
-        private void Bt_Prev_Click(object sender, RoutedEventArgs e)
-        {
-
+                campoCPF.Text = SiteUtil.FormatarCPF(campoCPF.Text);
+            }
         }
     }
 }

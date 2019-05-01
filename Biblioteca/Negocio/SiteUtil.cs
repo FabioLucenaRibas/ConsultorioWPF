@@ -7,7 +7,7 @@ namespace Biblioteca.Negocio
     public static class SiteUtil
     {
 
-        public static bool isValidCPF(String CPF)
+        public static bool IsValidCPF(String CPF)
         {
             int[] mt1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             int[] mt2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
@@ -16,8 +16,7 @@ namespace Biblioteca.Negocio
             int soma;
             int resto;
 
-            CPF = CPF.Trim();
-            CPF = Regex.Replace(CPF, "[^0-9,]", "");
+            CPF = RemoverCaracteresEspecial(CPF);
 
             if (CPF.Length != 11)
                 return false;
@@ -34,7 +33,7 @@ namespace Biblioteca.Negocio
                 resto = 11 - resto;
 
             Digito = resto.ToString();
-            TempCPF = TempCPF + Digito;
+            TempCPF += Digito;
             soma = 0;
 
             for (int i = 0; i < 10; i++)
@@ -46,47 +45,49 @@ namespace Biblioteca.Negocio
             else
                 resto = 11 - resto;
 
-            Digito = Digito + resto.ToString();
+            Digito += resto.ToString();
 
             return CPF.EndsWith(Digito);
         }
 
-        public static String formatarDataHora(DateTime dataHora)
+        public static String FormatarDataHora(DateTime dataHora)
         {
             return String.Format("{0:g}", dataHora);
         }
 
-        public static String formatarData(DateTime dataHora)
+        public static String FormatarData(DateTime dataHora)
         {
             return String.Format("{0:d}", dataHora);
         }
 
-        public static String formatarHora(DateTime dataHora)
+        public static String FormatarHora(DateTime dataHora)
         {
             return String.Format("{0:t}", dataHora);
         }
 
-        public static string obterDescricaoEnum(this Enum valorEnum)
+        public static string ObterDescricaoEnum(this Enum valorEnum)
         {
             return valorEnum.ObterAtributoDoTipo<DescriptionAttribute>().Description;
         }
 
-        public static string formatarCPF(String cpf)
+        public static string FormatarCPF(String cpf)
         {
-            return string.Format(cpf, @"000\.000\.000\-00");
+            string value = RemoverCaracteresEspecial(cpf);
+            return Convert.ToUInt64(value).ToString(@"000\.000\.000\-00");
         }
 
-        public static string formatarCPF(long cpf)
+        public static string FormatarCPF(long cpf)
         {
             return cpf.ToString(@"000\.000\.000\-00");
         }
 
-        public static string formatarCEP(String cep)
+        public static string FormatarCEP(String cep)
         {
-            return string.Format(cep, @"00\.000\-000");
+            string value = RemoverCaracteresEspecial(cep);
+            return Convert.ToUInt64(value).ToString(@"00\.000\-000");
         }
 
-        public static string formatarCEP(long cep)
+        public static string FormatarCEP(long cep)
         {
             if (!0L.Equals(cep))
             {
@@ -95,12 +96,13 @@ namespace Biblioteca.Negocio
             return string.Empty;
         }
 
-        public static string formatarTelefone(String telefone)
+        public static string FormatarTelefone(String telefone)
         {
-            return string.Format(telefone, @"\(00\) 0\.0000\-0000");
+            string value = RemoverCaracteresEspecial(telefone);
+            return Convert.ToUInt64(value).ToString(@"\(00\) 0\.0000\-0000");
         }
 
-        public static string formatarTelefone(long telefone)
+        public static string FormatarTelefone(long telefone)
         {
             return telefone.ToString(@"\(00\) 0\.0000\-0000");
         }
@@ -118,7 +120,7 @@ namespace Biblioteca.Negocio
             return (T)Enum.ToObject(typeof(T), codigo);
         }
 
-        public static String removerCaracteresEspecial(String value)
+        public static String RemoverCaracteresEspecial(String value)
         {
             return Regex.Replace(value, "[^0-9,]", "").Trim();
         }

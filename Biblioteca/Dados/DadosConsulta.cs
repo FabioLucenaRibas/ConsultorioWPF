@@ -20,8 +20,8 @@ namespace Biblioteca.Dados
                 sqlQuery += " LEFT JOIN  PACIENTE AS P ON A.FK_PACIENTE_CPF = P.CPF";
                 sqlQuery += " LEFT JOIN  SITUACAO AS S ON A.FK_SITUACAO_CODIGO = S.CODIGO";
                 sqlQuery += " LEFT JOIN  TRATAMENTO AS T ON A.FK_TRATAMENTO_CODIGO = T.CODIGO";
-                sqlQuery += " WHERE A.DATAHORA >= '" + SiteUtil.formatarData(pFiltro.DataInicio)+"'";
-                sqlQuery += "   AND A.DATAHORA <= '" + SiteUtil.formatarData(pFiltro.DataFim) + " 23:59:59'";
+                sqlQuery += " WHERE A.DATAHORA >= '" + SiteUtil.FormatarData(pFiltro.DataInicio)+"'";
+                sqlQuery += "   AND A.DATAHORA <= '" + SiteUtil.FormatarData(pFiltro.DataFim) + " 23:59:59'";
                 sqlQuery += "   AND P.NOME LIKE '%" + pFiltro.NomePaciente+ "%'";
                 sqlQuery += "   AND P.CPF LIKE '%" + pFiltro.Cpf + "%'";
                 sqlQuery += " ORDER BY A.DATAHORA";
@@ -35,19 +35,25 @@ namespace Biblioteca.Dados
                 while (DbReader.Read())
                 {
                     Consulta consulta = new Consulta();
-                    Paciente paciente = new Paciente();
-                    //acessando os valores das colunas do resultado
-                    paciente.Nome = DbReader.GetString(DbReader.GetOrdinal("NOME"));
-                    paciente.Cpf = DbReader.GetInt64(DbReader.GetOrdinal("CPF"));
-                    paciente.Telefone = DbReader.GetInt64(DbReader.GetOrdinal("TELEFONE"));
-                    paciente.Date = DbReader.GetDateTime(DbReader.GetOrdinal("DATANASCIMENTO"));
+                    Paciente paciente = new Paciente
+                    {
+                        //acessando os valores das colunas do resultado
+                        Nome = DbReader.GetString(DbReader.GetOrdinal("NOME")),
+                        Cpf = DbReader.GetInt64(DbReader.GetOrdinal("CPF")),
+                        Telefone = DbReader.GetInt64(DbReader.GetOrdinal("TELEFONE")),
+                        Date = DbReader.GetDateTime(DbReader.GetOrdinal("DATANASCIMENTO"))
+                    };
                     consulta.Paciente = paciente;
                     consulta.DataConsulta = DbReader.GetDateTime(DbReader.GetOrdinal("DATACONSULTA"));
-                    Tratamento tratamento = new Tratamento();
-                    tratamento.Nome = DbReader.GetString(DbReader.GetOrdinal("NOMECTRATAMENTO"));
+                    Tratamento tratamento = new Tratamento
+                    {
+                        Nome = DbReader.GetString(DbReader.GetOrdinal("NOMECTRATAMENTO"))
+                    };
                     consulta.Tratamento = tratamento;
-                    Situacao situacao = new Situacao();
-                    situacao.Descricao = DbReader.GetString(DbReader.GetOrdinal("DESCSITUACAO"));
+                    Situacao situacao = new Situacao
+                    {
+                        Descricao = DbReader.GetString(DbReader.GetOrdinal("DESCSITUACAO"))
+                    };
                     consulta.Situacao = situacao;
                     retorno.Add(consulta);
                 }
@@ -63,11 +69,6 @@ namespace Biblioteca.Dados
                 throw new Exception("Erro ao conectar e selecionar " + ex.Message);
             }
             return retorno;
-        }
-
-        public List<Consulta> Consultar(ConsultaFiltro consultaFiltro, object pFiltro)
-        {
-            throw new NotImplementedException();
         }
         #endregion
     }

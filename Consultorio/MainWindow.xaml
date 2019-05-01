@@ -15,7 +15,8 @@
         Background="{DynamicResource MaterialDesignPaper}" 
         FontFamily="{DynamicResource MaterialDesignFont}" 
         mc:Ignorable="d" Title="Consultorio" Height="644"
-        Width="1247" WindowStartupLocation="CenterScreen">
+        Width="1247" WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
     <Grid>
         <dragablz:TabablzControl BorderBrush="#FF37474F">
             <dragablz:TabablzControl.InterTabController>
@@ -65,10 +66,10 @@
                                 </ListView>
                                 <DockPanel Name="botoesPaginacaoAtendimento" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                                     <DockPanel>
-                                        <Button Name="bt_Prev" Click="BtnPrev_Click" Margin="0,0,5,0" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F">
+                                        <Button Name="bt_Prev" Click="BtnPrev_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F">
                                             <![CDATA[<]]>
                                         </Button>
-                                        <Button Name="bt_First" Click="BtnFirst_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F">
+                                        <Button Name="bt_First" Click="BtnFirst_Click" Margin="0,0,5,0" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F">
                                             <![CDATA[<<]]>
                                         </Button>
                                     </DockPanel>
@@ -81,7 +82,7 @@
                                     </DockPanel>
                                 </DockPanel>
                             </Grid>
-                            <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Auto">
+                            <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Auto" MaxWidth="240" HorizontalScrollBarVisibility="Auto">
                                 <TreeView Name="treeViewConsultaSimplificada" DockPanel.Dock="Right" MinWidth="220" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                             </ScrollViewer>
                         </Grid>
@@ -90,10 +91,48 @@
             </TabItem>
             <TabItem Header="PACIENTE">
                 <Grid>
-                    <DockPanel Margin="16,16,16,0" VerticalAlignment="Top">
-                        <TextBox Name="tb_Paciente_Nome" materialDesign:HintAssist.Hint="Nome" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0,0,0" HorizontalAlignment="Left" Width="300" />
-                        <TextBox Name="tb_Paciente_CPF" materialDesign:HintAssist.Hint="CPF" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0" HorizontalAlignment="Left" Width="150" PreviewTextInput="Tb_CPF_PreviewTextInput" MaxLength="14" LostFocus="Tb_CPF_LostFocus" />
-                        <Button Name="bt_Cadastra" Content="CADASTRAR" Click="Bt_pesquisar_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                    <DockPanel Margin="16,16,16,16">
+                        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+                            <TextBox Name="tb_Paciente_Nome" KeyDown="TxtPaciente_Nome_KeyDown" materialDesign:HintAssist.Hint="Nome" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0,0,0" HorizontalAlignment="Left" Width="300" />
+                            <TextBox Name="tb_Paciente_CPF" KeyDown="TxtPaciente_CPF_KeyDown" materialDesign:HintAssist.Hint="CPF" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0" HorizontalAlignment="Left" Width="150" PreviewTextInput="Tb_CPF_PreviewTextInput" MaxLength="14" LostFocus="Tb_CPF_LostFocus" />
+                            <Button Name="bt_Cadastra" Content="CADASTRAR" Click="Bt_Cadastrar_Paciente_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                        </DockPanel>
+                        <Grid DockPanel.Dock="Bottom">
+                            <ListView x:Name="gridPacientes" ItemsSource="{Binding}" Margin="0,0,0,46" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Nome Completo" DisplayMemberBinding="{Binding NomeCompleto}"/>
+                                        <GridViewColumn Header="CPF" DisplayMemberBinding="{Binding Cpf}"/>
+                                        <GridViewColumn Header="Telefone" DisplayMemberBinding="{Binding Telefone}"/>
+                                        <GridViewColumn Header="Sexo" DisplayMemberBinding="{Binding Sexo}"/>
+                                        <GridViewColumn Header="CEP" DisplayMemberBinding="{Binding Cep}"/>
+                                        <GridViewColumn Header="Logradouro" DisplayMemberBinding="{Binding Logradouro}"/>
+                                        <GridViewColumn Header="Numero" DisplayMemberBinding="{Binding Numero}"/>
+                                        <GridViewColumn Header="Complemento" DisplayMemberBinding="{Binding Complemento}"/>
+                                        <GridViewColumn Header="Estado" DisplayMemberBinding="{Binding Estado}"/>
+                                        <GridViewColumn Header="Cidade" DisplayMemberBinding="{Binding Cidade}"/>
+                                        <GridViewColumn Header="Bairro" DisplayMemberBinding="{Binding Bairro}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <DockPanel Name="botoesPaginacaoPacientes" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                                <DockPanel>
+                                    <Button Name="bt_Prev_Pacientes" Click="BtnPrevPacientes_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F">
+                                        <![CDATA[<]]>
+                                    </Button>
+                                    <Button Name="bt_First_Pacientes" Click="BtnFirstPacientes_Click" Margin="0,0,5,0" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F">
+                                        <![CDATA[<<]]>
+                                    </Button>
+                                </DockPanel>
+                                <Label Name="lb_PaginaAtualPacientes" Margin="15,0,5,0" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Label Content="-" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Label Name="lb_TotalPaginasPacientes" Margin="5,0,15,0" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <DockPanel>
+                                    <Button Name="bt_Last_Pacientes" Content=">>" Click="BtnLastPacientes_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                                    <Button Name="bt_Next_Pacientes" Content=">" Click="BtnNextPacientes_Click" Margin="0,0,5,0" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                                </DockPanel>
+                            </DockPanel>
+                        </Grid>
                     </DockPanel>
                 </Grid>
             </TabItem>

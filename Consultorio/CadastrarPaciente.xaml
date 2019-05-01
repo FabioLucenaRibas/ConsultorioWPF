@@ -1,0 +1,56 @@
+﻿    <Window Title="Consultorio" x:Class="Consultorio.CadastrarPaciente"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz" 
+        xmlns:local="clr-namespace:Consultorio" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}" 
+        TextElement.FontWeight="Regular" 
+        TextElement.FontSize="13" 
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto" 
+        Background="{DynamicResource MaterialDesignPaper}" 
+        FontFamily="{DynamicResource MaterialDesignFont}" 
+        mc:Ignorable="d" Height="511"
+        Width="963" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
+        <Grid>
+        <dragablz:TabablzControl BorderBrush="#FF37474F">
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController />
+            </dragablz:TabablzControl.InterTabController>
+            <TabItem Header="CADASTRO">
+                <Grid>
+                    <StackPanel Margin="36,16,36,16" >
+                        <DockPanel Margin="0,0,0,16">
+                            <materialDesign:PackIcon  Kind="Account" Margin="-20,15,5,0" />
+                            <TextBox Name="txtNomePaciente" materialDesign:HintAssist.Hint="Nome" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,0,20,0" HorizontalAlignment="Left" Width="400" />
+                            <materialDesign:PackIcon  Kind="CardTextOutline" Margin="0,15,5,0"/>
+                            <TextBox Name="txtCpf" materialDesign:HintAssist.Hint="CPF" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  Margin="0,0,20,0" HorizontalAlignment="Left" Width="125" PreviewTextInput="Tb_CPF_PreviewTextInput" MaxLength="14" LostFocus="Tb_CPF_LostFocus" />
+                            <materialDesign:PackIcon  Kind="Phone" Margin="0,15,5,0"/>
+                            <TextBox Name="txtTelefone" materialDesign:HintAssist.Hint="Telefone"  Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,0,20,0" HorizontalAlignment="Left" Width="125" PreviewTextInput="TxtTelefone_PreviewTextInput" MaxLength="16" LostFocus="TxtTelefone_LostFocus" />
+                            <DatePicker x:Name="dataNascimento" Language="pt-BR" VerticalAlignment="Bottom"/>
+                      </DockPanel>
+                        <DockPanel Margin="00,0,0,16">
+                            <RadioButton Name="rb_masculino" Content="Masculino" IsChecked="True" Margin="0,0,15,0" Style="{StaticResource MaterialDesignRadioButton}"/>
+                            <RadioButton Name="rb_feminino" Content="Feminino" Style="{StaticResource MaterialDesignRadioButton}"/>
+                        </DockPanel>
+                        <TextBox Name="txtCEP" Margin="0,40,0,16" materialDesign:HintAssist.Hint="CEP" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  HorizontalAlignment="Left" Width="150" KeyDown="TxtCEP_KeyDown" PreviewTextInput="TxtCEP_PreviewTextInput" MaxLength="10" LostFocus="TxtCEP_LostFocus" />
+                        <DockPanel Margin="00,0,0,16">
+                            <TextBox Name="txt_Logradouro" IsEnabled="False" Margin="0,0,20,0" materialDesign:HintAssist.Hint="Logradouro" Style="{StaticResource MaterialDesignFloatingHintTextBox}" HorizontalAlignment="Left" MaxLength="200" Width="740" />
+                            <TextBox Name="txtNumero" materialDesign:HintAssist.Hint="Numero" Style="{StaticResource MaterialDesignFloatingHintTextBox}" MaxLength="4" />
+                        </DockPanel>
+                        <TextBox Name="txtComplemento" Margin="00,0,0,16" materialDesign:HintAssist.Hint="Complemento" Style="{StaticResource MaterialDesignFloatingHintTextBox}" MaxLength="100"/>
+                        <DockPanel Margin="00,0,0,16">
+                            <TextBox Name="txt_Estado" IsEnabled="False" materialDesign:HintAssist.Hint="Estado" Margin="0,0,20,0" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  HorizontalAlignment="Left" Width="125" MaxLength="4" />
+                            <TextBox Name="txt_Cidade" IsEnabled="False" materialDesign:HintAssist.Hint="Cidade" Margin="0,0,20,0" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  HorizontalAlignment="Left" Width="125" MaxLength="4" />
+                            <TextBox Name="txt_Bairro" IsEnabled="False" materialDesign:HintAssist.Hint="Bairro" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  HorizontalAlignment="Left" Width="125" MaxLength="4" />
+                        </DockPanel>
+                        <Button Name="bt_Confirmar" Content="CONFIRMAR" Click="Bt_Confirmar_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </dragablz:TabablzControl>
+    </Grid>
+</Window>
