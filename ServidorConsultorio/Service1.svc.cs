@@ -28,5 +28,10 @@ namespace ServidorConsultorio
             new DadosPaciente().InserirPaciente(pFiltro);
         }
 
+        public void AtualizarPaciente(Paciente pFiltro)
+        {
+            new DadosPaciente().AtualizarPaciente(pFiltro);
+        }
+
     }
 }

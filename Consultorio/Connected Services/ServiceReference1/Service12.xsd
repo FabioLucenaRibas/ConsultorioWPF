@@ -55,4 +55,16 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="AtualizarPaciente">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Biblioteca.ClassesBasicas" minOccurs="0" name="pFiltro" nillable="true" type="q7:Paciente" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AtualizarPacienteResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

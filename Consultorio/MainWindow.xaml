@@ -15,7 +15,7 @@
         Background="{DynamicResource MaterialDesignPaper}" 
         FontFamily="{DynamicResource MaterialDesignFont}" 
         mc:Ignorable="d" Title="Consultorio" Height="644"
-        Width="1247" WindowStartupLocation="CenterScreen"
+        Width="1475" WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
     <Grid>
         <dragablz:TabablzControl BorderBrush="#FF37474F">
@@ -28,7 +28,7 @@
                         <materialDesign:Card Padding="22" DockPanel.Dock="Top">
                             <DockPanel>
                                 <DockPanel Margin="0,0,25,0">
-                                    <Image Height="85" Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Source="logo-fisioterapia (1).png" />
+                                    <Image Height="85" Width="65" VerticalAlignment="Top" HorizontalAlignment="Left" Source="Resource/logo.png" />
                                     <StackPanel>
                                         <TextBlock Text="Jéssyka ● Lucena" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0,25,10,-10" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" FontWeight="Bold"/>
                                         <TextBlock Text="FISIOTERAPEUTA" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0,5,10,0" FontSize="10" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"/>
@@ -51,7 +51,7 @@
                         </materialDesign:Card>
                         <Grid  Margin="16,16,16,0" DockPanel.Dock="Bottom">
                             <Grid  Margin="0,0,255,0">
-                                <ListView x:Name="gridAtendimento" ItemsSource="{Binding}" Margin="0,0,0,46" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <ListView x:Name="gridAtendimento" ItemsSource="{Binding}" Margin="0,0,0,46" ScrollViewer.VerticalScrollBarVisibility="Auto"  MouseDoubleClick="GridAtendimento_MouseDoubleClick">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="Data/Hora da consulta" DisplayMemberBinding="{Binding DataConsulta}"/>
@@ -93,12 +93,12 @@
                 <Grid>
                     <DockPanel Margin="16,16,16,16">
                         <DockPanel DockPanel.Dock="Top" Margin="0,0,0,16">
-                            <TextBox Name="tb_Paciente_Nome" KeyDown="TxtPaciente_Nome_KeyDown" materialDesign:HintAssist.Hint="Nome" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0,0,0" HorizontalAlignment="Left" Width="300" />
-                            <TextBox Name="tb_Paciente_CPF" KeyDown="TxtPaciente_CPF_KeyDown" materialDesign:HintAssist.Hint="CPF" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0" HorizontalAlignment="Left" Width="150" PreviewTextInput="Tb_CPF_PreviewTextInput" MaxLength="14" LostFocus="Tb_CPF_LostFocus" />
+                            <TextBox Name="tb_Paciente_Nome" KeyDown="TxtPaciente_Nome_KeyDown" LostFocus="Tb_Paciente_Nome_LostFocus" materialDesign:HintAssist.Hint="Nome" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0,0,0" HorizontalAlignment="Left" Width="300" />
+                            <TextBox Name="tb_Paciente_CPF" KeyDown="TxtPaciente_CPF_KeyDown" LostFocus="Tb_Paciente_CPF_LostFocus" materialDesign:HintAssist.Hint="CPF" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="20,0" HorizontalAlignment="Left" Width="150" PreviewTextInput="Tb_CPF_PreviewTextInput" MaxLength="14"/>
                             <Button Name="bt_Cadastra" Content="CADASTRAR" Click="Bt_Cadastrar_Paciente_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
                         </DockPanel>
                         <Grid DockPanel.Dock="Bottom">
-                            <ListView x:Name="gridPacientes" ItemsSource="{Binding}" Margin="0,0,0,46" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <ListView x:Name="gridPacientes" ItemsSource="{Binding}" Margin="0,0,0,46" ScrollViewer.VerticalScrollBarVisibility="Auto" MouseDoubleClick="GridPacientes_MouseDoubleClick">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Nome Completo" DisplayMemberBinding="{Binding NomeCompleto}"/>
@@ -137,6 +137,16 @@
                 </Grid>
             </TabItem>
         </dragablz:TabablzControl>
-        <Button Name="bt_Sobre" Content="SOBRE" Click="Bt_Sobre_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Top"  DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F" Margin="0,4,4,0" BorderThickness="1"/>
+        <DockPanel DockPanel.Dock="Right" Margin="4,4,4,4">
+            <Button Name="bt_Agendamento" Content="AGENDAMENTO" Style="{StaticResource MaterialDesignRaisedDarkButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top"  BorderBrush="#FFB0B0B0" Background="#FF37474F" BorderThickness="1"/>
+            <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,20,0">
+                <materialDesign:Chip Foreground="White" Content="Fábio José Lucena de Oliveira Acioli Lins Negreiros Ribas">
+                    <materialDesign:Chip.Icon>
+                        <materialDesign:PackIcon  Kind="Account"/>
+                    </materialDesign:Chip.Icon>
+                </materialDesign:Chip>
+            </DockPanel>
+            <!--Button Name="bt_Sobre" Content="SOBRE" Click="Bt_Sobre_Click" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Top"  DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F" Margin="0,4,4,0" BorderThickness="1"/-->
+        </DockPanel>
     </Grid>
 </Window>

@@ -30,67 +30,6 @@ namespace Consultorio
             InitializeComponent();
         }
 
-        private void Tb_CPF_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            FormatarCPF_KeyPress((TextBox)sender, e);
-        }
-
-
-        private void Tb_CPF_LostFocus(object sender, RoutedEventArgs e)
-        {
-            FormatarCPF_Leave((TextBox)sender);
-        }
-
-        private void FormatarCPF_KeyPress(TextBox campoCPF, TextCompositionEventArgs e)
-        {
-
-            if (!Char.IsDigit(Convert.ToChar(e.Text)) && Convert.ToChar(e.Text) != (char)8)
-            {
-                e.Handled = true;
-            }
-            if (char.IsNumber(Convert.ToChar(e.Text)) == true)
-            {
-                switch (campoCPF.Text.Length)
-                {
-                    case 0:
-                        campoCPF.Text = string.Empty;
-                        break;
-                    case 3:
-                        campoCPF.Text += ".";
-                        campoCPF.SelectionStart = 5;
-                        break;
-                    case 7:
-                        campoCPF.Text += ".";
-                        campoCPF.SelectionStart = 9;
-                        break;
-                    case 11:
-                        campoCPF.Text += "-";
-                        campoCPF.SelectionStart = 13;
-                        break;
-                }
-            }
-        }
-
-        private void FormatarCPF_Leave(TextBox campoCPF)
-        {
-            if (!14.Equals(campoCPF.Text.Length) && !11.Equals(campoCPF.Text.Length) && !10.Equals(campoCPF.Text.Length))
-            {
-                campoCPF.Text = string.Empty;
-            }
-            else
-            {
-                campoCPF.Text = SiteUtil.FormatarCPF(campoCPF.Text);
-            }
-        }
-
-        private void TxtCEP_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                ConsultarEndereco();
-            }
-        }
-
         private void ConsultarEndereco()
         {
             if (10.Equals(txtCEP.Text.Length) || 8.Equals(txtCEP.Text.Length))
@@ -125,76 +64,29 @@ namespace Consultorio
             txt_Estado.Text = string.Empty;
         }
 
-        private void TxtCEP_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (!Char.IsDigit(Convert.ToChar(e.Text)) && Convert.ToChar(e.Text) != (char)8)
-            {
-                e.Handled = true;
-            }
-
-            if (char.IsNumber(Convert.ToChar(e.Text)) == true)
-            {
-                switch (txtCEP.Text.Length)
-                {
-                    case 0:
-                        txtCEP.Text = string.Empty;
-                        break;
-                    case 2:
-                        txtCEP.Text += ".";
-                        txtCEP.SelectionStart = 4;
-                        break;
-                    case 6:
-                        txtCEP.Text += "-";
-                        txtCEP.SelectionStart = 8;
-                        break;
-                }
-            }
-        }
-
-        private void TxtTelefone_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (!Char.IsDigit(Convert.ToChar(e.Text)) && Convert.ToChar(e.Text) != (char)8)
-            {
-                e.Handled = true;
-            }
-
-            if (char.IsNumber(Convert.ToChar(e.Text)) == true)
-            {
-                switch (txtTelefone.Text.Length)
-                {
-                    case 0:
-                        txtTelefone.Text = "";
-                        break;
-                    case 1:
-                        txtTelefone.Text = "(" + txtTelefone.Text;
-                        txtTelefone.SelectionStart = 3;
-                        break;
-                    case 3:
-                        txtTelefone.Text += ") ";
-                        txtTelefone.SelectionStart = 7;
-                        break;
-                    case 6:
-                        txtTelefone.Text += ".";
-                        txtTelefone.SelectionStart = 8;
-                        break;
-                    case 11:
-                        txtTelefone.Text += "-";
-                        txtTelefone.SelectionStart = 13;
-                        break;
-                }
-            }
-        }
-
-        private void TxtCEP_LostFocus(object sender, EventArgs e)
-        {
-            ConsultarEndereco();
-        }
 
         private void Bt_Confirmar_Click(object sender, EventArgs e)
         {
             try
             {
                 ValidarInclusao();
+                MessageBoxResult Resultado = MessageBox.Show("Deseja confirmar o cadastro?", "Mensagem", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (MessageBoxResult.Yes.Equals(Resultado))
+                {
+                    CadastroPaciente();
+                }
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show(Ex.Message, "Mensagem", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void CadastroPaciente()
+        {
+            try
+            {
                 PreencherInclusao();
                 new Service1Client().InserirPaciente(pPaciente);
                 ((MainWindow)this.Owner).ConsultarPacientes();
@@ -209,20 +101,60 @@ namespace Consultorio
 
         private void ValidarInclusao()
         {
+            bool retorno = true;
 
-            if (string.Empty.Equals(txtNomePaciente.Text) || string.Empty.Equals(txtCpf.Text) || string.Empty.Equals(txtTelefone.Text) || SiteUtil.FormatarData(DateTime.Now).Equals(SiteUtil.FormatarData((DateTime)dataNascimento.SelectedDate)))
+            SiteUtil.ValidacaoTextBoxReset(txtNomePaciente);
+            if (string.Empty.Equals(txtNomePaciente.Text.Trim()))
             {
-                throw new Exception("Campos obrigatórios não preenchidos!");
+                SiteUtil.ValidacaoTextBox(txtNomePaciente);
+                retorno = false;
             }
 
-            if (!SiteUtil.IsValidCPF(txtCpf.Text))
+            SiteUtil.ValidacaoTextBoxReset(txtCpf);
+            if (string.Empty.Equals(txtCpf.Text))
             {
-                throw new Exception("CPF invalido.");
+                SiteUtil.ValidacaoTextBox(txtCpf);
+                retorno = false;
             }
 
+            SiteUtil.ValidacaoTextBoxReset(txtTelefone);
+            if (string.Empty.Equals(txtTelefone.Text))
+            {
+                SiteUtil.ValidacaoTextBox(txtTelefone);
+                retorno = false;
+            }
+
+            dataNascimento.BorderBrush = SiteUtil.BorderBrushPadrao();
+            if (dataNascimento.SelectedDate.Equals(null) || SiteUtil.FormatarData(DateTime.Now).Equals(SiteUtil.FormatarData((DateTime)dataNascimento.SelectedDate)))
+            {
+                dataNascimento.BorderBrush = Brushes.Red;
+                retorno = false;
+            }
+
+            if (!retorno)
+            {
+                throw new Exception(SiteUtil.CAMPOOBRIGATORIO);
+            }
+
+            SiteUtil.ValidacaoTextBoxReset(txtCpf);
+            if (!string.Empty.Equals(txtCpf.Text) && !SiteUtil.IsValidCPF(txtCpf.Text))
+            {
+                SiteUtil.ValidacaoTextBox(txtCpf);
+                throw new Exception("Favor informa um CPF valido!");
+            }
+
+            SiteUtil.ValidacaoTextBoxReset(txtNumero);
             if (!string.Empty.Equals(txt_Logradouro.Text) && string.Empty.Equals(txtNumero.Text))
             {
+                SiteUtil.ValidacaoTextBox(txtNumero);
                 throw new Exception("Favor informar um número para o endereço");
+            }
+            
+            if (string.Empty.Equals(txt_Logradouro.Text))
+            {
+                LimparEndereco();
+                txtNumero.Text = string.Empty;
+                txtComplemento.Text = string.Empty;
             }
         }
 
@@ -230,30 +162,56 @@ namespace Consultorio
         {
             pPaciente = new Paciente
             {
-                Nome = txtNomePaciente.Text
+                Nome = txtNomePaciente.Text,
+                Date = (DateTime)dataNascimento.SelectedDate,
+                Sexo = (bool)rb_feminino.IsChecked ? Sexo.FEMININO : Sexo.MASCULINO,
+                Logradouro = txt_Logradouro.Text,
+                Numero = SiteUtil.ConverterStringParaLong(txtNumero.Text),
+                Complemento = txtComplemento.Text,
+                Estado = txt_Estado.Text,
+                Cidade = txt_Cidade.Text,
+                Bairro = txt_Bairro.Text
             };
-            String retornoCPF = SiteUtil.RemoverCaracteresEspecial(txtCpf.Text);
-            if (!string.Empty.Equals(retornoCPF))
+
+            string retornoCPF = SiteUtil.RemoverCaracteresEspecial(txtCpf.Text);
+            pPaciente.Cpf = SiteUtil.ConverterStringParaLong(retornoCPF);
+
+            string retornoTelefone = SiteUtil.RemoverCaracteresEspecial(txtTelefone.Text);
+            pPaciente.Telefone = SiteUtil.ConverterStringParaLong(retornoTelefone);
+
+            string retornoCEP = SiteUtil.RemoverCaracteresEspecial(txtCEP.Text);
+            pPaciente.Cep = SiteUtil.ConverterStringParaLong(retornoCEP);
+
+        }
+
+        private void Tb_CPF_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            SiteUtil.FormatarCPFPreviewTextInput((TextBox)sender, e);
+        }
+
+
+        private void Tb_CPF_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SiteUtil.FormatarCPFLostFocus((TextBox)sender);
+        }
+
+        private void TxtCEP_LostFocus(object sender, EventArgs e)
+        {
+            ConsultarEndereco();
+        }
+
+
+        private void TxtCEP_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
             {
-                pPaciente.Cpf = Convert.ToInt64(retornoCPF);
+                ConsultarEndereco();
             }
+        }
 
-            String retornoTelefone = SiteUtil.RemoverCaracteresEspecial(txtTelefone.Text);
-            if (!string.Empty.Equals(retornoTelefone))
-            {
-                pPaciente.Telefone = Convert.ToInt64(retornoTelefone);
-            }
-
-            pPaciente.Date = (DateTime)dataNascimento.SelectedDate;
-            pPaciente.Sexo = (bool)rb_feminino.IsChecked ? Sexo.FEMININO : Sexo.MASCULINO;
-                        pPaciente.Cep = Convert.ToInt64(SiteUtil.RemoverCaracteresEspecial(txtCEP.Text));
-            pPaciente.Logradouro = txt_Logradouro.Text;
-            pPaciente.Numero = Convert.ToInt64(txtNumero.Text);
-            pPaciente.Complemento = txtComplemento.Text;
-            pPaciente.Estado = txt_Estado.Text;
-            pPaciente.Cidade = txt_Cidade.Text;
-            pPaciente.Bairro = txt_Bairro.Text;
-
+        private void TxtCEP_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            SiteUtil.TxtCEPPreviewTextInput((TextBox)sender, e);
         }
 
         private void TxtTelefone_LostFocus(object sender, EventArgs e)
@@ -268,7 +226,14 @@ namespace Consultorio
             }
         }
 
+        private void TxtTelefone_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            SiteUtil.FormatarCampoTelefonePreviewTextInput((TextBox)sender, e);
+        }
 
-
+        private void TxtNumero_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            SiteUtil.CampoNumericoPreviewTextInput(e);
+        }
     }
 }

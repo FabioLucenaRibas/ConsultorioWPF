@@ -2,6 +2,7 @@
 using Biblioteca.Negocio;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Biblioteca.Dados
@@ -14,28 +15,37 @@ namespace Biblioteca.Dados
             List<Paciente> retorno = new List<Paciente>();
             try
             {
-                this.abrirConexao();
+                this.AbrirConexao();
                 //instrucao a ser executada
-                String sqlQuery = "SELECT CPF";
-                sqlQuery += " ,NOME";
-                sqlQuery += " ,TELEFONE";
-                sqlQuery += " ,DATANASCIMENTO";
-                sqlQuery += " ,COALESCE (CIDADE, '') AS CIDADE";
-                sqlQuery += " ,COALESCE (ESTADO, '') AS ESTADO";
-                sqlQuery += " ,COALESCE (COMPLEMENTO, '') AS COMPLEMENTO";
-                sqlQuery += " ,COALESCE (LOGRADOURO, '') AS LOGRADOURO";
-                sqlQuery += " ,COALESCE (NUMERO, 0) AS NUMERO";
-                sqlQuery += " ,COALESCE (BAIRRO, '') AS BAIRRO";
-                sqlQuery += " ,COALESCE (CEP, 0) AS CEP";
-                sqlQuery += " ,COALESCE (SEXO, '') AS SEXO";
-                sqlQuery += " FROM PACIENTE";
-                sqlQuery += " WHERE NOME LIKE '%"+ pFiltro .Nome + "%'";
-                _ = 0L.Equals(pFiltro.Cpf) ? sqlQuery += " AND CPF LIKE '%%'" : sqlQuery += " AND CPF LIKE '%" + pFiltro.Cpf + "%'";
+                String sqlQuery = "SELECT CPF" +
+                                  " ,NOME" +
+                                  " ,TELEFONE" +
+                                  " ,DATANASCIMENTO" +
+                                  " ,COALESCE (CIDADE, '') AS CIDADE" +
+                                  " ,COALESCE (ESTADO, '') AS ESTADO" +
+                                  " ,COALESCE (COMPLEMENTO, '') AS COMPLEMENTO" +
+                                  " ,COALESCE (LOGRADOURO, '') AS LOGRADOURO" +
+                                  " ,COALESCE (NUMERO, 0) AS NUMERO" +
+                                  " ,COALESCE (BAIRRO, '') AS BAIRRO" +
+                                  " ,COALESCE (CEP, 0) AS CEP" +
+                                  " ,COALESCE (SEXO, '') AS SEXO" +
+                                  " FROM PACIENTE" +
+                                  " WHERE NOME LIKE @NOME" +
+                                  " AND CPF LIKE @CPF";
 
+                SqlCommand cmd = new SqlCommand(sqlQuery, SqlConn);
 
-                //sqlQuery += "";
+                cmd.Parameters.Add("@NOME", SqlDbType.VarChar).Value = "%" + pFiltro.Nome + "%";
 
-                SqlCommand cmd = new SqlCommand(sqlQuery, sqlConn);
+                if (0L.Equals(pFiltro.Cpf))
+                {
+                    cmd.Parameters.Add("@CPF", SqlDbType.VarChar).Value = "%%";
+                }
+                else
+                {
+                    cmd.Parameters.Add("@CPF", SqlDbType.VarChar).Value = "%" + pFiltro.Cpf + "%";
+                }
+
                 //executando a instrucao e colocando o resultado em um leitor
                 SqlDataReader DbReader = cmd.ExecuteReader();
                 //lendo o resultado da consulta
@@ -65,7 +75,7 @@ namespace Biblioteca.Dados
                 //liberando a memoria 
                 cmd.Dispose();
                 //fechando a conexao
-                this.fecharConexao();
+                this.FecharConexao();
             }
             catch (Exception ex)
             {
@@ -82,99 +92,49 @@ namespace Biblioteca.Dados
 
             try
             {
-                this.abrirConexao();
-                string sqlQuery = "INSERT INTO PACIENTE";
-                sqlQuery += " (CPF";
-                sqlQuery += " ,NOME";
-                sqlQuery += " ,DATANASCIMENTO";
-                sqlQuery += " ,ESTADO";
-                sqlQuery += " ,COMPLEMENTO";
-                sqlQuery += " ,CIDADE";
-                sqlQuery += " ,TELEFONE";
-                sqlQuery += " ,LOGRADOURO";
-                sqlQuery += " ,NUMERO";
-                sqlQuery += " ,BAIRRO";
-                sqlQuery += " ,CEP";
-                sqlQuery += " ,SEXO)";
-                sqlQuery += "  VALUES";
-                sqlQuery += " (" + pPaciente.Cpf;
-                sqlQuery += " ,'" + pPaciente.Nome + "'";
-                sqlQuery += " ,'" + SiteUtil.FormatarData(pPaciente.Date) + "'";
-
-                if (null != pPaciente.Estado && !string.Empty.Equals(pPaciente.Estado))
-                {
-                    sqlQuery += " ,'" + pPaciente.Estado + "'";
-                }
-                else
-                {
-                    sqlQuery += " ,NULL";
-                }
-
-                if (null != pPaciente.Complemento && !string.Empty.Equals(pPaciente.Complemento))
-                {
-                    sqlQuery += " ,'" + pPaciente.Complemento + "'";
-                }
-                else
-                {
-                    sqlQuery += " ,NULL";
-                }
-
-                if (null != pPaciente.Cidade && !string.Empty.Equals(pPaciente.Cidade))
-                {
-                    sqlQuery += " ,'" + pPaciente.Cidade + "'";
-                }
-                else
-                {
-                    sqlQuery += " ,NULL";
-                }
-
-                sqlQuery += " ," + pPaciente.Telefone;
-
-                if (null != pPaciente.Logradouro && !string.Empty.Equals(pPaciente.Logradouro))
-                {
-                    sqlQuery += " ,'" + pPaciente.Logradouro + "'";
-                }
-                else
-                {
-                    sqlQuery += " ,NULL";
-                }
-
-                if (!0.Equals(pPaciente.Numero))
-                {
-                    sqlQuery += " ," + pPaciente.Numero;
-                }
-                else
-                {
-                    sqlQuery += " ,NULL";
-                }
-
-                if (null != pPaciente.Bairro && !string.Empty.Equals(pPaciente.Bairro))
-                {
-                    sqlQuery += " ,'" + pPaciente.Bairro + "'";
-                }
-                else
-                {
-                    sqlQuery += " ,NULL";
-                }
-
-                if (!0.Equals(pPaciente.Cep))
-                {
-                    sqlQuery += " ," + pPaciente.Cep;
-                }
-                else
-                {
-                    sqlQuery += " ,NULL";
-                }
-                sqlQuery += " ,'" + (int) pPaciente.Sexo +"')";
+                this.AbrirConexao();
+                string sqlQuery = "INSERT INTO PACIENTE" +
+                                  " (CPF" +
+                                  " ,NOME" +
+                                  " ,DATANASCIMENTO" +
+                                  " ,ESTADO" +
+                                  " ,COMPLEMENTO" +
+                                  " ,CIDADE" +
+                                  " ,TELEFONE" +
+                                  " ,LOGRADOURO" +
+                                  " ,NUMERO" +
+                                  " ,BAIRRO" +
+                                  " ,CEP" +
+                                  " ,SEXO)" +
+                                  "  VALUES" +
+                                  " ( @CPF" +
+                                  " , @NOME" +
+                                  " , @DATANASCIMENTO" +
+                                  " , @ESTADO" +
+                                  " , @COMPLEMENTO" +
+                                  " , @CIDADE" +
+                                  " , @TELEFONE" +
+                                  " , @LOGRADOURO" +
+                                  " , @NUMERO" +
+                                  " , @BAIRRO" +
+                                  " , @CEP" +
+                                  " , @SEXO)";
 
                 //instrucao a ser executada
-                SqlCommand cmd = new SqlCommand(sqlQuery, this.sqlConn);
+                SqlCommand cmd = new SqlCommand(sqlQuery, SqlConn);
+
+                //Parametros
+                CarregarParametrosComuns(cmd, pPaciente);
+                cmd.Parameters.Add("@NOME", SqlDbType.VarChar).Value = pPaciente.Nome;
+                cmd.Parameters.Add("@DATANASCIMENTO", SqlDbType.Date).Value = SiteUtil.FormatarData(pPaciente.Date);
+                cmd.Parameters.Add("@SEXO", SqlDbType.VarChar).Value = (int)pPaciente.Sexo;
+
                 //executando a instrucao 
                 cmd.ExecuteNonQuery();
                 //liberando a memoria 
                 cmd.Dispose();
                 //fechando a conexao
-                this.fecharConexao();
+                this.FecharConexao();
             }
             catch (Exception ex)
             {
@@ -187,27 +147,138 @@ namespace Biblioteca.Dados
         #region Consultar CPF cadastrado
         public void ConsultarCPFExistente(Paciente pFiltro)
         {
-               this.abrirConexao();
+               this.AbrirConexao();
                 //instrucao a ser executada
-                String sqlQuery = "SELECT *";
-                sqlQuery += " FROM PACIENTE";
-                sqlQuery += " WHERE CPF = " + pFiltro.Cpf;
+                String sqlQuery = "SELECT *" +
+                                  " FROM PACIENTE" +
+                                  " WHERE CPF = @CPF";
 
-                SqlCommand cmd = new SqlCommand(sqlQuery, sqlConn);
+                SqlCommand cmd = new SqlCommand(sqlQuery, SqlConn);
+
+                cmd.Parameters.Add("@CPF", SqlDbType.BigInt).Value = pFiltro.Cpf;
+
                 //executando a instrucao e colocando o resultado em um leitor
                 SqlDataReader DbReader = cmd.ExecuteReader();
                 //lendo o resultado da consulta
                 while (DbReader.Read())
                 {
-                    throw new Exception("Existe um paciente cadastrado com o CPF informado ");
+                    throw new Exception("Já existe um paciente cadastrado com o CPF informado ");
                 }
                 //fechando o leitor de resultados
                 DbReader.Close();
                 //liberando a memoria 
                 cmd.Dispose();
                 //fechando a conexao
-                this.fecharConexao();
+                this.FecharConexao();
         }
         #endregion
+
+        #region Atualizar dadoss de novo paciente
+        public void AtualizarPaciente(Paciente pPaciente)
+        {
+            try
+            {
+                this.AbrirConexao();
+                string sqlQuery = "UPDATE PACIENTE" +
+                                  " SET TELEFONE = @TELEFONE" +
+                                  ",ESTADO       = @ESTADO" +
+                                  ",COMPLEMENTO  = @COMPLEMENTO" +
+                                  ",CIDADE       = @CIDADE" +
+                                  ",LOGRADOURO   = @LOGRADOURO" +
+                                  ",NUMERO       = @NUMERO" +
+                                  ",BAIRRO       = @BAIRRO" +
+                                  ",CEP          = @CEP" +
+                                  " WHERE CPF    = @CPF";
+
+                //instrucao a ser executada
+                SqlCommand cmd = new SqlCommand(sqlQuery, SqlConn);
+
+                CarregarParametrosComuns(cmd, pPaciente);
+
+                //executando a instrucao 
+                cmd.ExecuteNonQuery();
+                //liberando a memoria 
+                cmd.Dispose();
+                //fechando a conexao
+                this.FecharConexao();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao atualizar os dados do paciente\n" + ex.Message);
+            }
+        }
+
+        #endregion
+
+        private void CarregarParametrosComuns(SqlCommand cmd, Paciente pPaciente)
+        {
+            cmd.Parameters.Add("@CPF", SqlDbType.BigInt).Value = pPaciente.Cpf;
+            cmd.Parameters.Add("@TELEFONE", SqlDbType.BigInt).Value = pPaciente.Telefone;
+
+            if (null != pPaciente.Estado && !string.Empty.Equals(pPaciente.Estado, StringComparison.Ordinal))
+            {
+                cmd.Parameters.Add("@ESTADO", SqlDbType.VarChar).Value = pPaciente.Estado;
+            }
+            else
+            {
+                cmd.Parameters.Add("@ESTADO", SqlDbType.VarChar).Value = DBNull.Value;
+            }
+
+            if (null != pPaciente.Complemento && !string.Empty.Equals(pPaciente.Complemento, StringComparison.Ordinal))
+            {
+                cmd.Parameters.Add("@COMPLEMENTO", SqlDbType.VarChar).Value = pPaciente.Complemento;
+            }
+            else
+            {
+                cmd.Parameters.Add("@COMPLEMENTO", SqlDbType.VarChar).Value = DBNull.Value;
+            }
+
+            if (null != pPaciente.Cidade && !string.Empty.Equals(pPaciente.Cidade, StringComparison.Ordinal))
+            {
+                cmd.Parameters.Add("@CIDADE", SqlDbType.VarChar).Value = pPaciente.Cidade;
+            }
+            else
+            {
+                cmd.Parameters.Add("@CIDADE", SqlDbType.VarChar).Value = DBNull.Value;
+            }
+
+
+            if (null != pPaciente.Logradouro && !string.Empty.Equals(pPaciente.Logradouro, StringComparison.Ordinal))
+            {
+                cmd.Parameters.Add("@LOGRADOURO", SqlDbType.VarChar).Value = pPaciente.Logradouro;
+            }
+            else
+            {
+                cmd.Parameters.Add("@LOGRADOURO", SqlDbType.VarChar).Value = DBNull.Value;
+            }
+
+            if (!0.Equals(pPaciente.Numero))
+            {
+                cmd.Parameters.Add("@NUMERO", SqlDbType.BigInt).Value = pPaciente.Numero;
+            }
+            else
+            {
+                cmd.Parameters.Add("@NUMERO", SqlDbType.BigInt).Value = DBNull.Value;
+            }
+
+            if (null != pPaciente.Bairro && !string.Empty.Equals(pPaciente.Bairro, StringComparison.Ordinal))
+            {
+                cmd.Parameters.Add("@BAIRRO", SqlDbType.VarChar).Value = pPaciente.Bairro;
+            }
+            else
+            {
+                cmd.Parameters.Add("@BAIRRO", SqlDbType.VarChar).Value = DBNull.Value;
+            }
+
+            if (!0.Equals(pPaciente.Cep))
+            {
+                cmd.Parameters.Add("@CEP", SqlDbType.BigInt).Value = pPaciente.Cep;
+            }
+            else
+            {
+                cmd.Parameters.Add("@CEP", SqlDbType.BigInt).Value = DBNull.Value;
+            }
+
+        }
     }
 }

@@ -38,6 +38,12 @@ namespace Consultorio.ServiceReference1 {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/InserirPaciente", ReplyAction="http://tempuri.org/IService1/InserirPacienteResponse")]
         System.Threading.Tasks.Task InserirPacienteAsync(Biblioteca.ClassesBasicas.Paciente pFiltro);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/AtualizarPaciente", ReplyAction="http://tempuri.org/IService1/AtualizarPacienteResponse")]
+        void AtualizarPaciente(Biblioteca.ClassesBasicas.Paciente pFiltro);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/AtualizarPaciente", ReplyAction="http://tempuri.org/IService1/AtualizarPacienteResponse")]
+        System.Threading.Tasks.Task AtualizarPacienteAsync(Biblioteca.ClassesBasicas.Paciente pFiltro);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -97,6 +103,14 @@ namespace Consultorio.ServiceReference1 {
         
         public System.Threading.Tasks.Task InserirPacienteAsync(Biblioteca.ClassesBasicas.Paciente pFiltro) {
             return base.Channel.InserirPacienteAsync(pFiltro);
+        }
+        
+        public void AtualizarPaciente(Biblioteca.ClassesBasicas.Paciente pFiltro) {
+            base.Channel.AtualizarPaciente(pFiltro);
+        }
+        
+        public System.Threading.Tasks.Task AtualizarPacienteAsync(Biblioteca.ClassesBasicas.Paciente pFiltro) {
+            return base.Channel.AtualizarPacienteAsync(pFiltro);
         }
     }
 }

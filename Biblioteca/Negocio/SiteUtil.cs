@@ -1,11 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Biblioteca.Negocio
 {
     public static class SiteUtil
     {
+
+        public const string CAMPOOBRIGATORIO = "Campos obrigatórios não preenchidos!";
 
         public static bool IsValidCPF(String CPF)
         {
@@ -96,7 +101,7 @@ namespace Biblioteca.Negocio
             return string.Empty;
         }
 
-        public static string FormatarTelefone(String telefone)
+        public static string FormatarTelefone(string telefone)
         {
             string value = RemoverCaracteresEspecial(telefone);
             return Convert.ToUInt64(value).ToString(@"\(00\) 0\.0000\-0000");
@@ -123,6 +128,158 @@ namespace Biblioteca.Negocio
         public static String RemoverCaracteresEspecial(String value)
         {
             return Regex.Replace(value, "[^0-9,]", "").Trim();
+        }
+
+        public static long ConverterStringParaLong(string value)
+        {
+            if (string.Empty.Equals(value))
+            {
+                return 0L;
+            }
+            else
+            {
+                return Convert.ToInt64(value);
+            }
+
+        }
+
+        public static SolidColorBrush BorderBrushPadrao()
+        {
+            SolidColorBrush retono = new SolidColorBrush();
+            Color cor = new Color
+            {
+                A = 137,
+                ScA = 0.5372549F
+            };
+            retono.Color = cor;
+            return retono;
+        }
+
+        public static void ValidacaoTextBox(TextBox campo, string msg)
+        {
+            ValidacaoTextBox(campo);
+            campo.ToolTip = msg;
+        }
+
+        public static void ValidacaoTextBox(TextBox campo)
+        {
+            campo.BorderBrush = Brushes.Red;
+        }
+
+        public static void ValidacaoTextBoxReset(TextBox campo)
+        {
+            campo.BorderBrush = BorderBrushPadrao();
+            campo.ToolTip = null;
+        }
+
+        public static void FormatarCPFPreviewTextInput(TextBox campo, TextCompositionEventArgs e)
+        {
+
+            if (!Char.IsDigit(Convert.ToChar(e.Text)) && Convert.ToChar(e.Text) != (char)8)
+            {
+                e.Handled = true;
+            }
+            if (char.IsNumber(Convert.ToChar(e.Text)) == true)
+            {
+                switch (campo.Text.Length)
+                {
+                    case 0:
+                        campo.Text = string.Empty;
+                        break;
+                    case 3:
+                        campo.Text += ".";
+                        campo.SelectionStart = 5;
+                        break;
+                    case 7:
+                        campo.Text += ".";
+                        campo.SelectionStart = 9;
+                        break;
+                    case 11:
+                        campo.Text += "-";
+                        campo.SelectionStart = 13;
+                        break;
+                }
+            }
+        }
+
+        public static void FormatarCPFLostFocus(TextBox campo)
+        {
+            if (!14.Equals(campo.Text.Length) && !11.Equals(campo.Text.Length) && !10.Equals(campo.Text.Length))
+            {
+                campo.Text = string.Empty;
+            }
+            else
+            {
+                campo.Text = FormatarCPF(campo.Text);
+            }
+        }
+
+        public static void TxtCEPPreviewTextInput(TextBox campo, TextCompositionEventArgs e)
+        {
+            if (!Char.IsDigit(Convert.ToChar(e.Text)) && Convert.ToChar(e.Text) != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            if (char.IsNumber(Convert.ToChar(e.Text)) == true)
+            {
+                switch (campo.Text.Length)
+                {
+                    case 0:
+                        campo.Text = string.Empty;
+                        break;
+                    case 2:
+                        campo.Text += ".";
+                        campo.SelectionStart = 4;
+                        break;
+                    case 6:
+                        campo.Text += "-";
+                        campo.SelectionStart = 8;
+                        break;
+                }
+            }
+        }
+
+        public static void FormatarCampoTelefonePreviewTextInput(TextBox campo, TextCompositionEventArgs e)
+        {
+            if (!Char.IsDigit(Convert.ToChar(e.Text)) && Convert.ToChar(e.Text) != (char)8)
+            {
+                e.Handled = true;
+            }
+
+            if (char.IsNumber(Convert.ToChar(e.Text)) == true)
+            {
+                switch (campo.Text.Length)
+                {
+                    case 0:
+                        campo.Text = "";
+                        break;
+                    case 1:
+                        campo.Text = "(" + campo.Text;
+                        campo.SelectionStart = 3;
+                        break;
+                    case 3:
+                        campo.Text += ") ";
+                        campo.SelectionStart = 7;
+                        break;
+                    case 6:
+                        campo.Text += ".";
+                        campo.SelectionStart = 8;
+                        break;
+                    case 11:
+                        campo.Text += "-";
+                        campo.SelectionStart = 13;
+                        break;
+                }
+            }
+        }
+
+        public static void CampoNumericoPreviewTextInput(TextCompositionEventArgs e)
+        {
+            if (!Char.IsDigit(Convert.ToChar(e.Text)) && Convert.ToChar(e.Text) != (char)8)
+            {
+                e.Handled = true;
+            }
         }
     }
 }

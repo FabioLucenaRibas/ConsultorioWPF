@@ -22,6 +22,9 @@ namespace ServidorConsultorio
         [OperationContract]
         void InserirPaciente(Paciente pFiltro);
 
+        [OperationContract]
+        void AtualizarPaciente(Paciente pFiltro);
+
         // TODO: Add your service operations here
     }
 

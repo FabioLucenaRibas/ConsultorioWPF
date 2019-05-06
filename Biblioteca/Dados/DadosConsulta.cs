@@ -2,6 +2,7 @@
 using Biblioteca.Negocio;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Biblioteca.Dados
@@ -14,23 +15,42 @@ namespace Biblioteca.Dados
             List<Consulta> retorno = new List<Consulta>();
             try
             {
-                this.abrirConexao();
+                this.AbrirConexao();
+
                 //instrucao a ser executada
-                String sqlQuery = "SELECT P.NOME AS NOME, P.CPF AS CPF, P.TELEFONE AS TELEFONE, P.DATANASCIMENTO AS DATANASCIMENTO, A.DATAHORA AS DATACONSULTA, T.NOME AS NOMECTRATAMENTO, S.DESCRICAO AS DESCSITUACAO FROM ATENDIMENTO AS A";
-                sqlQuery += " LEFT JOIN  PACIENTE AS P ON A.FK_PACIENTE_CPF = P.CPF";
-                sqlQuery += " LEFT JOIN  SITUACAO AS S ON A.FK_SITUACAO_CODIGO = S.CODIGO";
-                sqlQuery += " LEFT JOIN  TRATAMENTO AS T ON A.FK_TRATAMENTO_CODIGO = T.CODIGO";
-                sqlQuery += " WHERE A.DATAHORA >= '" + SiteUtil.FormatarData(pFiltro.DataInicio)+"'";
-                sqlQuery += "   AND A.DATAHORA <= '" + SiteUtil.FormatarData(pFiltro.DataFim) + " 23:59:59'";
-                sqlQuery += "   AND P.NOME LIKE '%" + pFiltro.NomePaciente+ "%'";
-                sqlQuery += "   AND P.CPF LIKE '%" + pFiltro.Cpf + "%'";
-                sqlQuery += " ORDER BY A.DATAHORA";
+                String sqlQuery = "SELECT P.NOME AS NOME" +
+                                ", P.CPF AS CPF" +
+                                ", P.TELEFONE AS TELEFONE" +
+                                ", P.DATANASCIMENTO AS DATANASCIMENTO" +
+                                ", A.DATAHORA AS DATACONSULTA" +
+                                ", T.NOME AS NOMECTRATAMENTO" +
+                                ", S.DESCRICAO AS DESCSITUACAO" +
+                                " FROM ATENDIMENTO AS A" +
+                                " LEFT JOIN  PACIENTE AS P ON A.FK_PACIENTE_CPF = P.CPF" +
+                                " LEFT JOIN  SITUACAO AS S ON A.FK_SITUACAO_CODIGO = S.CODIGO" +
+                                " LEFT JOIN  TRATAMENTO AS T ON A.FK_TRATAMENTO_CODIGO = T.CODIGO" +
+                                " WHERE (A.DATAHORA >= @DATAINICIO" +
+                                "   AND  A.DATAHORA <= @DATAFIM)" +
+                                "   AND  P.NOME LIKE @NOMEPACIENTE" +
+                                "   AND  P.CPF LIKE @CPF" +
+                                " ORDER  BY A.DATAHORA";
+                SqlCommand cmd = new SqlCommand(sqlQuery, SqlConn);
 
-                //sqlQuery += "";
+                cmd.Parameters.Add("@DATAINICIO", SqlDbType.DateTime).Value = SiteUtil.FormatarData(pFiltro.DataInicio);
+                cmd.Parameters.Add("@DATAFIM", SqlDbType.DateTime).Value = SiteUtil.FormatarData(pFiltro.DataFim) + " 23:59:59";
+                cmd.Parameters.Add("@NOMEPACIENTE", SqlDbType.VarChar).Value = "%" + pFiltro.NomePaciente + "%";
 
-                SqlCommand cmd = new SqlCommand(sqlQuery, sqlConn);
+                if (0L.Equals(pFiltro.Cpf))
+                {
+                    cmd.Parameters.Add("@CPF", SqlDbType.VarChar).Value = "%%";
+                }
+                else
+                {
+                    cmd.Parameters.Add("@CPF", SqlDbType.VarChar).Value = "%" + pFiltro.Cpf + "%";
+                }
+
                 //executando a instrucao e colocando o resultado em um leitor
-                SqlDataReader DbReader = cmd.ExecuteReader();
+                 SqlDataReader DbReader = cmd.ExecuteReader();
                 //lendo o resultado da consulta
                 while (DbReader.Read())
                 {
@@ -62,7 +82,7 @@ namespace Biblioteca.Dados
                 //liberando a memoria 
                 cmd.Dispose();
                 //fechando a conexao
-                this.fecharConexao();
+                this.FecharConexao();
             }
             catch (Exception ex)
             {
