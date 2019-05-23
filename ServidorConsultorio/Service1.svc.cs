@@ -20,7 +20,7 @@ namespace ServidorConsultorio
 
         public CEP ConsultarCEP(string CEP)
         {
-            return new DadosBuscaCEP().ConsultarCEP(CEP);
+            return DadosBuscaCEP.ConsultarCEP(CEP);
         }
 
         public void InserirPaciente(Paciente pFiltro)
@@ -33,5 +33,15 @@ namespace ServidorConsultorio
             new DadosPaciente().AtualizarPaciente(pFiltro);
         }
 
+        public List<HistoricoPaciente> ConsultarHistorico(Paciente pFiltro)
+        {
+            return new DadosPaciente().ConsultarHistorico(pFiltro);
+        }
+
+
+        public void AtualizarHistorico(HistoricoPaciente pHistorico)
+        {
+            new DadosPaciente().AtualizarHistorico(pHistorico);
+        }
     }
 }

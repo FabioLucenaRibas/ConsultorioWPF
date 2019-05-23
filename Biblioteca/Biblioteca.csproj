@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="ClassesBasicas\CEP.cs" />
     <Compile Include="ClassesBasicas\ConsultaFiltro.cs" />
+    <Compile Include="ClassesBasicas\HistoricoPaciente.cs" />
     <Compile Include="ClassesBasicas\Usuario.cs" />
     <Compile Include="ClassesBasicas\Consulta.cs" />
     <Compile Include="ClassesBasicas\Tratamento.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Dados\DadosConsulta.cs" />
     <Compile Include="Dados\Conexao.cs" />
     <Compile Include="ClassesBasicas\Sexo.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Negocio\SiteUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\PacientesViewModel.cs" />

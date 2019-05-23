@@ -44,6 +44,18 @@ namespace Consultorio.ServiceReference1 {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/AtualizarPaciente", ReplyAction="http://tempuri.org/IService1/AtualizarPacienteResponse")]
         System.Threading.Tasks.Task AtualizarPacienteAsync(Biblioteca.ClassesBasicas.Paciente pFiltro);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/ConsultarHistorico", ReplyAction="http://tempuri.org/IService1/ConsultarHistoricoResponse")]
+        Biblioteca.ClassesBasicas.HistoricoPaciente[] ConsultarHistorico(Biblioteca.ClassesBasicas.Paciente pFiltro);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/ConsultarHistorico", ReplyAction="http://tempuri.org/IService1/ConsultarHistoricoResponse")]
+        System.Threading.Tasks.Task<Biblioteca.ClassesBasicas.HistoricoPaciente[]> ConsultarHistoricoAsync(Biblioteca.ClassesBasicas.Paciente pFiltro);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/AtualizarHistorico", ReplyAction="http://tempuri.org/IService1/AtualizarHistoricoResponse")]
+        void AtualizarHistorico(Biblioteca.ClassesBasicas.HistoricoPaciente pHistorico);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/AtualizarHistorico", ReplyAction="http://tempuri.org/IService1/AtualizarHistoricoResponse")]
+        System.Threading.Tasks.Task AtualizarHistoricoAsync(Biblioteca.ClassesBasicas.HistoricoPaciente pHistorico);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -111,6 +123,22 @@ namespace Consultorio.ServiceReference1 {
         
         public System.Threading.Tasks.Task AtualizarPacienteAsync(Biblioteca.ClassesBasicas.Paciente pFiltro) {
             return base.Channel.AtualizarPacienteAsync(pFiltro);
+        }
+        
+        public Biblioteca.ClassesBasicas.HistoricoPaciente[] ConsultarHistorico(Biblioteca.ClassesBasicas.Paciente pFiltro) {
+            return base.Channel.ConsultarHistorico(pFiltro);
+        }
+        
+        public System.Threading.Tasks.Task<Biblioteca.ClassesBasicas.HistoricoPaciente[]> ConsultarHistoricoAsync(Biblioteca.ClassesBasicas.Paciente pFiltro) {
+            return base.Channel.ConsultarHistoricoAsync(pFiltro);
+        }
+        
+        public void AtualizarHistorico(Biblioteca.ClassesBasicas.HistoricoPaciente pHistorico) {
+            base.Channel.AtualizarHistorico(pHistorico);
+        }
+        
+        public System.Threading.Tasks.Task AtualizarHistoricoAsync(Biblioteca.ClassesBasicas.HistoricoPaciente pHistorico) {
+            return base.Channel.AtualizarHistoricoAsync(pHistorico);
         }
     }
 }

@@ -4,9 +4,9 @@ using System.Xml.Linq;
 
 namespace Biblioteca.Dados
 {
-    public class DadosBuscaCEP
+    public static class DadosBuscaCEP
     {
-        public CEP ConsultarCEP(string pCep)
+        public static CEP ConsultarCEP(string pCep)
         {
             CEP modeloRetorno = new CEP();
 

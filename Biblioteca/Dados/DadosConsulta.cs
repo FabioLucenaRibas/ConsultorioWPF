@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace Biblioteca.Dados
 {
@@ -15,7 +16,7 @@ namespace Biblioteca.Dados
             List<Consulta> retorno = new List<Consulta>();
             try
             {
-                this.AbrirConexao();
+                AbrirConexao();
 
                 //instrucao a ser executada
                 String sqlQuery = "SELECT P.NOME AS NOME" +
@@ -82,13 +83,29 @@ namespace Biblioteca.Dados
                 //liberando a memoria 
                 cmd.Dispose();
                 //fechando a conexao
-                this.FecharConexao();
+                FecharConexao();
+                return retorno;
             }
-            catch (Exception ex)
+            catch (InvalidCastException Ex)
             {
-                throw new Exception("Erro ao conectar e selecionar " + ex.Message);
+                throw new Exception("Erro ao consultar dados do atendimento\n" + Ex.Message);
             }
-            return retorno;
+            catch (SqlException Ex)
+            {
+                throw new Exception("Erro ao consultar dados do atendimento\n" + Ex.Message);
+            }
+            catch (IOException Ex)
+            {
+                throw new Exception("Erro ao consultar dados do atendimento\n" + Ex.Message);
+            }
+            catch (InvalidOperationException Ex)
+            {
+                throw new Exception("Erro ao consultar dados do atendimento\n" + Ex.Message);
+            }
+            finally
+            {
+                FecharConexao();
+            }
         }
         #endregion
     }

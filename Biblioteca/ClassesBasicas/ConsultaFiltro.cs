@@ -6,8 +6,8 @@ namespace Biblioteca.ClassesBasicas
     {
         private DateTime dataInicio = DateTime.Now;
         private DateTime dataFim = DateTime.Now;
-        private String nomePaciente;
-        private long cpf;
+        public String NomePaciente { get; set; }
+        public long Cpf { get; set; }
 
         public DateTime DataInicio
         {
@@ -19,18 +19,6 @@ namespace Biblioteca.ClassesBasicas
         {
             get { return dataFim; }
             set { dataFim = value; }
-        }
-
-        public String NomePaciente
-        {
-            get { return nomePaciente; }
-            set { nomePaciente = value; }
-        }
-
-        public long Cpf
-        {
-            get { return cpf; }
-            set { cpf = value; }
         }
     }
 }

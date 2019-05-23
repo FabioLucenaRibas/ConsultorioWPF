@@ -67,4 +67,30 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="ConsultarHistorico">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Biblioteca.ClassesBasicas" minOccurs="0" name="pFiltro" nillable="true" type="q8:Paciente" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultarHistoricoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Biblioteca.ClassesBasicas" minOccurs="0" name="ConsultarHistoricoResult" nillable="true" type="q9:ArrayOfHistoricoPaciente" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AtualizarHistorico">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Biblioteca.ClassesBasicas" minOccurs="0" name="pHistorico" nillable="true" type="q10:HistoricoPaciente" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AtualizarHistoricoResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

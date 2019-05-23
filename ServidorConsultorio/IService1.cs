@@ -25,6 +25,12 @@ namespace ServidorConsultorio
         [OperationContract]
         void AtualizarPaciente(Paciente pFiltro);
 
+        [OperationContract]
+        List<HistoricoPaciente> ConsultarHistorico(Paciente pFiltro);
+
+        [OperationContract]
+        void AtualizarHistorico(HistoricoPaciente pHistorico);
+
         // TODO: Add your service operations here
     }
 

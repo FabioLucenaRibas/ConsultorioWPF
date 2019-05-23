@@ -140,7 +140,7 @@
         <DockPanel DockPanel.Dock="Right" Margin="4,4,4,4">
             <Button Name="bt_Agendamento" Content="AGENDAMENTO" Style="{StaticResource MaterialDesignRaisedDarkButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top"  BorderBrush="#FFB0B0B0" Background="#FF37474F" BorderThickness="1"/>
             <DockPanel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,20,0">
-                <materialDesign:Chip Foreground="White" Content="Fábio José Lucena de Oliveira Acioli Lins Negreiros Ribas">
+                <materialDesign:Chip Foreground="White" Content="Fábio Lucena Ribas">
                     <materialDesign:Chip.Icon>
                         <materialDesign:PackIcon  Kind="Account"/>
                     </materialDesign:Chip.Icon>

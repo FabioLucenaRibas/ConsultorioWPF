@@ -107,7 +107,7 @@ namespace Consultorio
             // this.gridAtendimento.DataContext = ViewSource;
             gridAtendimento.ItemsSource = AtendimentoViewSource.View;
             ShowCurrentPageIndex();
-            this.lb_TotalPaginas.Content = AtendimentoTotalPage.ToString();
+            lb_TotalPaginas.Content = AtendimentoTotalPage.ToString();
             gridAtendimento.Visibility = Visibility;
             treeViewConsultaSimplificada.Visibility = Visibility;
             botoesPaginacaoAtendimento.Visibility = Visibility;
@@ -117,15 +117,8 @@ namespace Consultorio
         {
             if (gridAtendimento.SelectedItems.Count == 1)
             {
-                Paciente pFiltro = new Paciente();
                 ConsultaViewModel value = (ConsultaViewModel)gridAtendimento.SelectedItem;
-                String retorno = SiteUtil.RemoverCaracteresEspecial(value.Cpf);
-                if (!string.Empty.Equals(retorno))
-                {
-                    pFiltro.Cpf = Convert.ToInt64(retorno);
-                }
-                Paciente resultado = new Service1Client().ConsultarPaciente(pFiltro).ToList()[0];
-                DetalhePaciente formDetalhePaciente = new DetalhePaciente(resultado)
+                DetalhePaciente formDetalhePaciente = new DetalhePaciente(value)
                 {
                     Owner = this
                 };
@@ -271,7 +264,7 @@ namespace Consultorio
             }
         }
 
-        private void PreencherItemNodeTreeView(TreeViewItem rootNode, Consulta item)
+        private static void PreencherItemNodeTreeView(TreeViewItem rootNode, Consulta item)
         {
             TreeViewItem rootItem = new TreeViewItem
             {

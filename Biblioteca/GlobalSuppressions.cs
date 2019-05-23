@@ -1,0 +1,23 @@
+﻿
+// This file is used by Code Analysis to maintain SuppressMessage 
+// attributes that are applied to this project.
+// Project-level suppressions either have no target or are given 
+// a specific target and scoped to a namespace, type, member, etc.
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.CampoNumericoPreviewTextInput(System.Windows.Input.TextCompositionEventArgs)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.ConverterStringParaLong(System.String)~System.Int64")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.ConverterStringParaLong(System.String)~System.Int64")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.FormatarCampoTelefonePreviewTextInput(System.Windows.Controls.TextBox,System.Windows.Input.TextCompositionEventArgs)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.FormatarCEP(System.Int64)~System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.FormatarCEP(System.String)~System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.FormatarCPF(System.Int64)~System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.FormatarCPF(System.String)~System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.FormatarCPFPreviewTextInput(System.Windows.Controls.TextBox,System.Windows.Input.TextCompositionEventArgs)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.FormatarData(System.DateTime)~System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.FormatarDataHora(System.DateTime)~System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.FormatarHora(System.DateTime)~System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.FormatarTelefone(System.Int64)~System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.FormatarTelefone(System.String)~System.String")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.IsValidCPF(System.String)~System.Boolean")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.IsValidCPF(System.String)~System.Boolean")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pendente>", Scope = "member", Target = "~M:Biblioteca.Negocio.SiteUtil.TxtCEPPreviewTextInput(System.Windows.Controls.TextBox,System.Windows.Input.TextCompositionEventArgs)")]

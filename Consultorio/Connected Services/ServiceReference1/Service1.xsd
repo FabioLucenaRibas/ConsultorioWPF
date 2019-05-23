@@ -85,4 +85,18 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CEP" nillable="true" type="tns:CEP" />
+  <xs:complexType name="ArrayOfHistoricoPaciente">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="HistoricoPaciente" nillable="true" type="tns:HistoricoPaciente" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfHistoricoPaciente" nillable="true" type="tns:ArrayOfHistoricoPaciente" />
+  <xs:complexType name="HistoricoPaciente">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Codigo" type="xs:int" />
+      <xs:element minOccurs="0" name="DataConsulta" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DescricaoHistorico" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="HistoricoPaciente" nillable="true" type="tns:HistoricoPaciente" />
 </xs:schema>

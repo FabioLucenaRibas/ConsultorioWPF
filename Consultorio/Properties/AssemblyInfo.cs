@@ -28,7 +28,7 @@ using System.Windows;
 //o atributo NeutralResourceLanguage abaixo.  Atualize o "en-US" na
 //linha abaixo para coincidir com a configuração do UICulture no arquivo do projeto.
 
-//[assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
+[assembly: NeutralResourcesLanguage("pt-BR", UltimateResourceFallbackLocation.Satellite)]
 
 
 [assembly: ThemeInfo(

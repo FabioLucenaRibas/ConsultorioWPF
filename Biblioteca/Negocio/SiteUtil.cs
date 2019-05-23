@@ -175,7 +175,7 @@ namespace Biblioteca.Negocio
         public static void FormatarCPFPreviewTextInput(TextBox campo, TextCompositionEventArgs e)
         {
 
-            if (!Char.IsDigit(Convert.ToChar(e.Text)) && Convert.ToChar(e.Text) != (char)8)
+            if (!char.IsDigit(Convert.ToChar(e.Text)) && Convert.ToChar(e.Text) != (char)8)
             {
                 e.Handled = true;
             }

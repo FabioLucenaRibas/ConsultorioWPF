@@ -37,6 +37,18 @@
   <wsdl:message name="IService1_AtualizarPaciente_OutputMessage">
     <wsdl:part name="parameters" element="tns:AtualizarPacienteResponse" />
   </wsdl:message>
+  <wsdl:message name="IService1_ConsultarHistorico_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultarHistorico" />
+  </wsdl:message>
+  <wsdl:message name="IService1_ConsultarHistorico_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultarHistoricoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_AtualizarHistorico_InputMessage">
+    <wsdl:part name="parameters" element="tns:AtualizarHistorico" />
+  </wsdl:message>
+  <wsdl:message name="IService1_AtualizarHistorico_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AtualizarHistoricoResponse" />
+  </wsdl:message>
   <wsdl:portType name="IService1">
     <wsdl:operation name="Consultar">
       <wsdl:input wsaw:Action="http://tempuri.org/IService1/Consultar" message="tns:IService1_Consultar_InputMessage" />
@@ -57,6 +69,14 @@
     <wsdl:operation name="AtualizarPaciente">
       <wsdl:input wsaw:Action="http://tempuri.org/IService1/AtualizarPaciente" message="tns:IService1_AtualizarPaciente_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IService1/AtualizarPacienteResponse" message="tns:IService1_AtualizarPaciente_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarHistorico">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/ConsultarHistorico" message="tns:IService1_ConsultarHistorico_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/ConsultarHistoricoResponse" message="tns:IService1_ConsultarHistorico_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AtualizarHistorico">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/AtualizarHistorico" message="tns:IService1_AtualizarHistorico_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/AtualizarHistoricoResponse" message="tns:IService1_AtualizarHistorico_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IService1" type="tns:IService1">
@@ -99,6 +119,24 @@
     </wsdl:operation>
     <wsdl:operation name="AtualizarPaciente">
       <soap:operation soapAction="http://tempuri.org/IService1/AtualizarPaciente" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarHistorico">
+      <soap:operation soapAction="http://tempuri.org/IService1/ConsultarHistorico" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AtualizarHistorico">
+      <soap:operation soapAction="http://tempuri.org/IService1/AtualizarHistorico" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

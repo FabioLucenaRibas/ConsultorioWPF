@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto" 
         Background="{DynamicResource MaterialDesignPaper}" 
         FontFamily="{DynamicResource MaterialDesignFont}" 
-        mc:Ignorable="d" Height="511"
+        mc:Ignorable="d" Height="531" Loaded="Window_Loaded"
         Width="963" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
             <Grid>
                 <dragablz:TabablzControl BorderBrush="#FF37474F">
@@ -23,9 +23,15 @@
             <TabItem Header="HISTORICO">
                 <Grid>
                     <StackPanel Margin="20">
-                        <CheckBox x:Name="chk_Alterar" Content="Alterar" IsChecked="False" Margin="0,0,0,10"/>
-                        <TextBox materialDesign:HintAssist.Hint="Histórico/Acompanhamento do paciente" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" Height="308" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" IsEnabled="{Binding Path=IsChecked, ElementName=chk_Alterar}" />
-                        <Button Name="bt_AlterarHistorio" Content="ALTERAR" Click="Bt_Confirmar_Alterar_Click" Margin="0,16,0,0" IsEnabled="{Binding Path=IsChecked, ElementName=chk_Alterar}"  Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                        <DockPanel Margin="0,0,0,10">
+                            <ComboBox Name="dataConsultaHistorico" materialDesign:HintAssist.Hint="Data da consulta" IsEditable="True" Margin="0,0,10,0"  Style="{StaticResource MaterialDesignFloatingHintComboBox}" Width="115" HorizontalAlignment="Left" SelectionChanged="DataConsultaHistorico_SelectionChanged"/>
+                            <ToggleButton Name="chk_Alterar" IsChecked="False" Click="Chk_Alterar_Click" Margin="0,10,0,0" HorizontalAlignment="Right" Style="{StaticResource MaterialDesignSwitchToggleButton}"/>
+                        </DockPanel>
+                        <TextBox Name="TxtHistorico" materialDesign:HintAssist.Hint="Histórico/Acompanhamento do paciente" IsReadOnly="True" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" Height="308" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                        <DockPanel>
+                            <Button Name="bt_AlterarHistorio" Content="ALTERAR" Click="Bt_AlterarHistorio_Click" Margin="0,16,0,0" IsEnabled="{Binding Path=IsChecked, ElementName=chk_Alterar}"  Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                            <Button Name="bt_GerarPDF" Content="GERAR PDF" Click="Bt_GerarPDF_Click" Margin="0,16,16,0" Style="{StaticResource MaterialDesignRaisedDarkButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" BorderBrush="#FFB0B0B0" Background="#FF37474F"/>
+                        </DockPanel>
                     </StackPanel>
                 </Grid>
             </TabItem>

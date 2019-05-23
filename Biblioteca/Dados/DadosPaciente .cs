@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace Biblioteca.Dados
 {
@@ -15,7 +16,7 @@ namespace Biblioteca.Dados
             List<Paciente> retorno = new List<Paciente>();
             try
             {
-                this.AbrirConexao();
+                AbrirConexao();
                 //instrucao a ser executada
                 String sqlQuery = "SELECT CPF" +
                                   " ,NOME" +
@@ -75,11 +76,27 @@ namespace Biblioteca.Dados
                 //liberando a memoria 
                 cmd.Dispose();
                 //fechando a conexao
-                this.FecharConexao();
+                FecharConexao();
             }
-            catch (Exception ex)
+            catch (InvalidCastException Ex)
             {
-                throw new Exception("Erro ao conectar e selecionar " + ex.Message);
+                throw new Exception("Erro ao consultar dados do paciente\n" + Ex.Message);
+            }
+            catch (SqlException Ex)
+            {
+                throw new Exception("Erro ao consultar dados do paciente\n" + Ex.Message);
+            }
+            catch (IOException Ex)
+            {
+                throw new Exception("Erro ao consultar dados do paciente\n" + Ex.Message);
+            }
+            catch (InvalidOperationException Ex)
+            {
+                throw new Exception("Erro ao consultar dados do paciente\n" + Ex.Message);
+            }
+            finally
+            {
+                FecharConexao();
             }
             return retorno;
         }
@@ -92,7 +109,7 @@ namespace Biblioteca.Dados
 
             try
             {
-                this.AbrirConexao();
+                AbrirConexao();
                 string sqlQuery = "INSERT INTO PACIENTE" +
                                   " (CPF" +
                                   " ,NOME" +
@@ -134,20 +151,38 @@ namespace Biblioteca.Dados
                 //liberando a memoria 
                 cmd.Dispose();
                 //fechando a conexao
-                this.FecharConexao();
+                FecharConexao();
             }
-            catch (Exception ex)
+            catch (InvalidCastException Ex)
             {
-                throw new Exception("Erro ao conectar e inserir\n" + ex.Message);
+                throw new Exception("Erro ao cadastra paciente\n" + Ex.Message);
+            }
+            catch (SqlException Ex)
+            {
+                throw new Exception("Erro ao cadastra paciente\n" + Ex.Message);
+            }
+            catch (IOException Ex)
+            {
+                throw new Exception("Erro ao cadastra paciente\n" + Ex.Message);
+            }
+            catch (InvalidOperationException Ex)
+            {
+                throw new Exception("Erro ao cadastra paciente\n" + Ex.Message);
+            }
+            finally
+            {
+                FecharConexao();
             }
         }
 
         #endregion
 
         #region Consultar CPF cadastrado
-        public void ConsultarCPFExistente(Paciente pFiltro)
+        public bool ConsultarCPFExistente(Paciente pFiltro)
         {
-               this.AbrirConexao();
+            try { 
+                bool Retorno = false;
+                AbrirConexao();
                 //instrucao a ser executada
                 String sqlQuery = "SELECT *" +
                                   " FROM PACIENTE" +
@@ -160,8 +195,9 @@ namespace Biblioteca.Dados
                 //executando a instrucao e colocando o resultado em um leitor
                 SqlDataReader DbReader = cmd.ExecuteReader();
                 //lendo o resultado da consulta
-                while (DbReader.Read())
+                if (DbReader.Read())
                 {
+                    Retorno = true;
                     throw new Exception("Já existe um paciente cadastrado com o CPF informado ");
                 }
                 //fechando o leitor de resultados
@@ -169,7 +205,29 @@ namespace Biblioteca.Dados
                 //liberando a memoria 
                 cmd.Dispose();
                 //fechando a conexao
-                this.FecharConexao();
+                FecharConexao();
+                return Retorno;
+            }
+            catch (InvalidCastException Ex)
+            {
+                throw new Exception("Erro ao verificar CPF\n" + Ex.Message);
+            }
+            catch (SqlException Ex)
+            {
+                throw new Exception("Erro ao verificar CPF\n" + Ex.Message);
+            }
+            catch (IOException Ex)
+            {
+                throw new Exception("Erro ao verificar CPF\n" + Ex.Message);
+            }
+            catch (InvalidOperationException Ex)
+            {
+                throw new Exception("Erro ao verificar CPF\n" + Ex.Message);
+            }
+            finally
+            {
+                FecharConexao();
+            }
         }
         #endregion
 
@@ -178,7 +236,7 @@ namespace Biblioteca.Dados
         {
             try
             {
-                this.AbrirConexao();
+                AbrirConexao();
                 string sqlQuery = "UPDATE PACIENTE" +
                                   " SET TELEFONE = @TELEFONE" +
                                   ",ESTADO       = @ESTADO" +
@@ -192,7 +250,6 @@ namespace Biblioteca.Dados
 
                 //instrucao a ser executada
                 SqlCommand cmd = new SqlCommand(sqlQuery, SqlConn);
-
                 CarregarParametrosComuns(cmd, pPaciente);
 
                 //executando a instrucao 
@@ -200,17 +257,144 @@ namespace Biblioteca.Dados
                 //liberando a memoria 
                 cmd.Dispose();
                 //fechando a conexao
-                this.FecharConexao();
+                FecharConexao();
             }
-            catch (Exception ex)
+            catch (InvalidCastException Ex)
             {
-                throw new Exception("Erro ao atualizar os dados do paciente\n" + ex.Message);
+                throw new Exception("Erro ao atualizar os dados do paciente\n" + Ex.Message);
+            }
+            catch (SqlException Ex)
+            {
+                throw new Exception("Erro ao atualizar os dados do paciente\n" + Ex.Message);
+            }
+            catch (IOException Ex)
+            {
+                throw new Exception("Erro ao atualizar os dados do paciente\n" + Ex.Message);
+            }
+            catch (InvalidOperationException Ex)
+            {
+                throw new Exception("Erro ao atualizar os dados do paciente\n" + Ex.Message);
+            }
+            finally
+            {
+                FecharConexao();
             }
         }
 
         #endregion
 
-        private void CarregarParametrosComuns(SqlCommand cmd, Paciente pPaciente)
+        #region Consultar Historico do paciente
+        public List<HistoricoPaciente> ConsultarHistorico(Paciente pFiltro)
+        {
+            try
+            {
+                List<HistoricoPaciente> retorno = new List<HistoricoPaciente>();
+                AbrirConexao();
+                //instrucao a ser executada
+                String sqlQuery = " SELECT B.CODIGO AS CODIGO" +
+                                  " ,B.DATAHORA" +
+                                  " ,COALESCE (B.DESCRICAO, '')  AS DESCRICAOHISTORICO" +
+                                  " FROM PACIENTE_HISTORICO AS A" +
+                                  " INNER JOIN HISTORICO AS B" +
+                                  " ON B.CODIGO = A.CODIGO_HISTORICO" +
+                                  " WHERE A.CPF_PACIENTE = @CPF";
+
+                SqlCommand cmd = new SqlCommand(sqlQuery, SqlConn);
+                cmd.Parameters.Add("@CPF", SqlDbType.BigInt).Value = pFiltro.Cpf;
+
+                //executando a instrucao e colocando o resultado em um leitor
+                SqlDataReader DbReader = cmd.ExecuteReader();
+                //lendo o resultado da consulta
+                while (DbReader.Read())
+                {
+                    HistoricoPaciente historico = new HistoricoPaciente
+                    {
+                        //acessando os valores das colunas do resultado
+                        Codigo = DbReader.GetInt32(DbReader.GetOrdinal("CODIGO")),
+                        DataConsulta = DbReader.GetDateTime(DbReader.GetOrdinal("DATAHORA")),
+                        DescricaoHistorico = DbReader.GetString(DbReader.GetOrdinal("DESCRICAOHISTORICO"))
+                    };
+                    retorno.Add(historico);
+                }
+                //fechando o leitor de resultados
+                DbReader.Close();
+                //liberando a memoria 
+                cmd.Dispose();
+                //fechando a conexao
+                FecharConexao();
+                return retorno;
+
+            }
+            catch (InvalidCastException Ex)
+            {
+                throw new Exception("Erro ao atualizar o historico\n" + Ex.Message);
+            }
+            catch (SqlException Ex)
+            {
+                throw new Exception("Erro ao atualizar o historico\n" + Ex.Message);
+            }
+            catch (IOException Ex)
+            {
+                throw new Exception("Erro ao atualizar o historico\n" + Ex.Message);
+            }
+            catch (InvalidOperationException Ex)
+            {
+                throw new Exception("Erro ao atualizar o historico\n" + Ex.Message);
+            }
+            finally
+            {
+                FecharConexao();
+            }
+        }
+        #endregion
+
+        #region Atualizar Historico do paciente
+        public void AtualizarHistorico(HistoricoPaciente pHistorico)
+        {
+            try
+            {
+                AbrirConexao();
+                string sqlQuery = "UPDATE HISTORICO" +
+                                  " SET DESCRICAO = @DESCRICAO" +
+                                  " WHERE CODIGO  = @CODIGO";
+
+                //instrucao a ser executada
+                SqlCommand cmd = new SqlCommand(sqlQuery, SqlConn);
+                cmd.Parameters.Add("@CODIGO", SqlDbType.Int).Value = pHistorico.Codigo;
+                cmd.Parameters.Add("@DESCRICAO", SqlDbType.VarChar).Value = pHistorico.DescricaoHistorico;
+
+                //executando a instrucao 
+                cmd.ExecuteNonQuery();
+                //liberando a memoria 
+                cmd.Dispose();
+                //fechando a conexao
+                FecharConexao();
+            }
+            catch (InvalidCastException Ex)
+            {
+                throw new Exception("Erro ao atualizar o historico\n" + Ex.Message);
+            }
+            catch (SqlException Ex)
+            {
+                throw new Exception("Erro ao atualizar o historico\n" + Ex.Message);
+            }
+            catch (IOException Ex)
+            {
+                throw new Exception("Erro ao atualizar o historico\n" + Ex.Message);
+            }
+            catch (InvalidOperationException Ex)
+            {
+                throw new Exception("Erro ao atualizar o historico\n" + Ex.Message);
+            }
+            finally
+            {
+                FecharConexao();
+            }
+        }
+
+        #endregion
+
+        private static void CarregarParametrosComuns(SqlCommand cmd, Paciente pPaciente)
         {
             cmd.Parameters.Add("@CPF", SqlDbType.BigInt).Value = pPaciente.Cpf;
             cmd.Parameters.Add("@TELEFONE", SqlDbType.BigInt).Value = pPaciente.Telefone;
