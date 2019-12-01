@@ -351,48 +351,70 @@ namespace Consultorio
 
         private void Bt_GerarPDF_Click(object sender, RoutedEventArgs e)
         {
+            DateTime fileCreationDatetime = DateTime.Now;
+            string fileName = string.Format("{0}.pdf", fileCreationDatetime.ToString(@"yyyyMMdd") + "_" + fileCreationDatetime.ToString(@"HHmmss"));
+            string pdfPath = @"C: \Users\FabioLucenaRibas\Desktop\" + "teste2.pdf";
 
-            if (null != dataConsultaHistorico.SelectedItem)
+            using (FileStream msReport = new FileStream(pdfPath, FileMode.Create))
             {
-                Document doc = new Document(PageSize.A4);//criando e estipulando o tipo da folha usada
-                doc.SetMargins(40, 40, 40, 80);//estibulando o espaçamento das margens que queremos
-                doc.AddCreationDate();//adicionando as configuracoes
 
-                //caminho onde sera criado o pdf + nome desejado
-                //OBS: o nome sempre deve ser terminado com .pdf
-                string caminho = @"C: \Users\FabioLucenaRibas\Desktop\teste.pdf";
-
-                //criando o arquivo pdf embranco, passando como parametro a variavel doc criada acima e a variavel caminho 
-                //tambem criada acima.
-                PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(caminho, FileMode.Create));
-
-                doc.Open();
-
-                string dados = string.Empty;
-                Paragraph paragrafo = new Paragraph(dados, new Font(Font.NORMAL, 12));
-                paragrafo.Alignment = Element.ALIGN_LEFT;
-                paragrafo.Add(SiteUtil.FormatarData(HistoricoSelecionado.DataConsulta));
-                doc.Add(paragrafo);
-
-                Paragraph paragrafo1 = new Paragraph(dados, new Font(Font.NORMAL, 12));
-                paragrafo1.Alignment = Element.ALIGN_LEFT;
-                paragrafo1.Add(HistoricoSelecionado.DescricaoHistorico);
-                doc.Add(paragrafo1);
-                //acidionado paragrafo ao documento
-
-                //fechando documento para que seja salva as alteraçoes.
-                doc.Close();
-
-
-            }
-            else
-            {
-                foreach (HistoricoPaciente item in HistoricoPacientes)
+                using (Document pdfDoc = new Document(PageSize.A4, 25f, 25f, 140f, 70f))
                 {
+                    try
+                    {
+
+                        PdfWriter pdfWriter = PdfWriter.GetInstance(pdfDoc, msReport);
+                        pdfWriter.PageEvent = new PdfWriterEvents("Jéssyka ● Lucena");
+
+                        pdfDoc.Open();
+                        if (null != dataConsultaHistorico.SelectedItem)
+                        {
+
+                            Paragraph paragrafo = new Paragraph(SiteUtil.FormatarData(HistoricoSelecionado.DataConsulta), new Font(Font.NORMAL, 12));
+                            paragrafo.Alignment = Element.ALIGN_LEFT;
+                            pdfDoc.Add(paragrafo);
+
+                            Chunk chunkNewLine = new Chunk(Chunk.NEWLINE);
+                            Phrase addressPhrase = new Phrase();
+                            addressPhrase.Add(chunkNewLine);
+                            pdfDoc.Add(addressPhrase);
+
+                            Paragraph paragrafo1 = new Paragraph(HistoricoSelecionado.DescricaoHistorico, new Font(Font.NORMAL, 12));
+                            paragrafo1.Alignment = Element.ALIGN_LEFT;
+                            pdfDoc.Add(paragrafo1);
+
+                        }
+                        else
+                        {
+                            foreach (HistoricoPaciente item in HistoricoPacientes)
+                            {
+                                Paragraph paragrafo = new Paragraph(SiteUtil.FormatarData(item.DataConsulta), new Font(Font.NORMAL, 12));
+                                paragrafo.Alignment = Element.ALIGN_LEFT;
+                                pdfDoc.Add(paragrafo);
+
+                                Chunk chunkNewLine = new Chunk(Chunk.NEWLINE);
+                                Phrase addressPhrase = new Phrase();
+                                addressPhrase.Add(chunkNewLine);
+                                pdfDoc.Add(addressPhrase);
+
+                                Paragraph paragrafo1 = new Paragraph(item.DescricaoHistorico, new Font(Font.NORMAL, 12));
+                                paragrafo1.Alignment = Element.ALIGN_LEFT;
+                                pdfDoc.Add(paragrafo1);
+
+                                pdfDoc.NewPage();
+                            }
+                        }
+
+                        pdfDoc.Close();
+                    }
+                    catch (Exception Ex)
+                    {
+                        MessageBox.Show(@"Erro ao gerar o PDF\n" + Ex.Message, "Mensagem", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+
                 }
             }
-            Process.Start(@"C:\Users\FabioLucenaRibas\Desktop\teste.pdf");
+            //Process.Start(pdfPath);
         }
-
     }
 }
